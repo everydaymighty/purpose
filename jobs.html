@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Browse jobs — Pathway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .jobs-page {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    padding: 32px 0 64px;
+  }
+
+  .search-bar {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 6px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    font: inherit;
+    font-size: 15px;
+    background: transparent;
+    color: var(--text);
+    min-width: 0;
+  }
+  .search-bar input::placeholder { color: var(--text-muted); }
+  .search-bar button {
+    padding: 10px 22px;
+    background: var(--purple-700);
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .search-bar button:hover { background: var(--purple-800); }
+
+  .filters {
+    position: sticky;
+    top: 96px;
+    height: fit-content;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+  .filters h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .filters h3 a {
+    font-size: 13px;
+    color: var(--purple-700);
+    font-weight: 600;
+  }
+  .filter-group { margin-bottom: 22px; }
+  .filter-group:last-child { margin-bottom: 0; }
+  .filter-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .filter-opt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .filter-opt input { accent-color: var(--purple-700); cursor: pointer; }
+  .filter-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .results-header .count {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .results-header .count strong { color: var(--text); }
+
+  .results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .pager {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 32px;
+  }
+  .pager button {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all .15s ease;
+  }
+  .pager button:hover { border-color: var(--purple-400); color: var(--purple-800); }
+  .pager button.active {
+    background: var(--purple-700);
+    color: white;
+    border-color: var(--purple-700);
+  }
+
+  .save-btn {
+    margin-left: 6px;
+    color: var(--text-muted);
+    padding: 6px;
+    border-radius: 6px;
+    transition: all .15s ease;
+  }
+  .save-btn:hover { color: var(--purple-700); background: var(--purple-50); }
+
+  @media (max-width: 860px) {
+    .jobs-page { grid-template-columns: 1fr; }
+    .filters { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+      </span>
+      Pathway
+    </a>
+    <div class="nav-links">
+      <a href="jobs.html" class="active">Browse jobs</a>
+      <a href="index.html#how">How it works</a>
+      <a href="employers.html">For employers</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn btn-ghost">Sign in</a>
+      <a href="signup.html" class="btn btn-primary">Get started</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="jobs.html" class="active">Browse jobs</a>
+  <a href="index.html#how">How it works</a>
+  <a href="employers.html">For employers</a>
+  <a href="profile.html">Profile</a>
+  <div class="divider-line"></div>
+  <a href="signin.html" class="btn btn-ghost">Sign in</a>
+  <a href="signup.html" class="btn btn-primary">Get started</a>
+</div>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="container">
+    <h1 class="page-title">Browse open roles</h1>
+    <p class="page-sub">120,438 jobs across every industry, updated daily.</p>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="container">
+  <div class="jobs-page">
+
+    <!-- SIDEBAR FILTERS -->
+    <aside class="filters">
+      <h3>Filters <a href="#" id="clearFilters">Clear all</a></h3>
+
+      <div class="filter-group">
+        <span class="filter-label">Job type</span>
+        <label class="filter-opt"><input type="checkbox" data-filter="type" data-value="Full-time" checked> Full-time <span class="filter-count">82,140</span></label>
+        <label class="filter-opt"><input type="checkbox" data-filter="type" data-value="Part-time"> Part-time <span class="filter-count">14,902</span></label>
+        <label class="filter-opt"><input type="checkbox" data-filter="type" data-value="Contract"> Contract <span class="filter-count">9,481</span></label>
+        <label class="filter-opt"><input type="checkbox" data-filter="type" data-value="Internship"> Internship <span class="filter-count">3,221</span></label>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Work arrangement</span>
+        <label class="filter-opt"><input type="checkbox" data-filter="arrangement" data-value="Remote"> Remote <span class="filter-count">42,118</span></label>
+        <label class="filter-opt"><input type="checkbox" data-filter="arrangement" data-value="Hybrid"> Hybrid <span class="filter-count">31,902</span></label>
+        <label class="filter-opt"><input type="checkbox" data-filter="arrangement" data-value="On-site"> On-site <span class="filter-count">46,418</span></label>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Experience</span>
+        <label class="filter-opt"><input type="checkbox" data-filter="experience" data-value="Entry level"> Entry level <span class="filter-count">22,408</span></label>
+        <label class="filter-opt"><input type="checkbox" data-filter="experience" data-value="Mid-level"> Mid-level <span class="filter-count">51,003</span></label>
+        <label class="filter-opt"><input type="checkbox" data-filter="experience" data-value="Senior"> Senior <span class="filter-count">38,621</span></label>
+        <label class="filter-opt"><input type="checkbox" data-filter="experience" data-value="Lead / Manager"> Lead / Manager <span class="filter-count">8,406</span></label>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Salary (USD)</span>
+        <label class="filter-opt"><input type="checkbox" data-filter="salary" data-value="40"> $40k+</label>
+        <label class="filter-opt"><input type="checkbox" data-filter="salary" data-value="70"> $70k+</label>
+        <label class="filter-opt"><input type="checkbox" data-filter="salary" data-value="100"> $100k+</label>
+        <label class="filter-opt"><input type="checkbox" data-filter="salary" data-value="150"> $150k+</label>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Date posted</span>
+        <label class="filter-opt"><input type="radio" name="date" data-filter="date" data-value="1"> Last 24 hours</label>
+        <label class="filter-opt"><input type="radio" name="date" data-filter="date" data-value="7" checked> Last 7 days</label>
+        <label class="filter-opt"><input type="radio" name="date" data-filter="date" data-value="30"> Last 30 days</label>
+        <label class="filter-opt"><input type="radio" name="date" data-filter="date" data-value="999"> Any time</label>
+      </div>
+    </aside>
+
+    <!-- RESULTS -->
+    <main>
+      <form class="search-bar" id="jobSearchForm">
+        <input type="text" id="jobSearchInput" placeholder="Search by title, company, or keyword…" />
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="results-header">
+        <div class="count" id="resultsCount"><strong>7</strong> matching results</div>
+        <select class="select" id="sortSelect" style="width: auto;">
+          <option value="relevance">Sort by: Relevance</option>
+          <option value="recent">Most recent</option>
+          <option value="salary-high">Salary: high to low</option>
+          <option value="salary-low">Salary: low to high</option>
+        </select>
+      </div>
+
+      <div class="results-list" id="jobResults">
+
+        <a href="job.html" class="job-card"
+           data-title="Senior Product Designer"
+           data-company="Aria Health"
+           data-tags="Full-time,Remote,Healthcare,Senior level"
+           data-salary-min="140" data-salary-max="180"
+           data-posted="2">
+          <div class="job-logo">A</div>
+          <div class="job-body">
+            <div class="job-title-row">
+              <div>
+                <div class="job-title">Senior Product Designer</div>
+                <div class="job-company">Aria Health · Remote · United States</div>
+              </div>
+              <div class="flex items-center">
+                <div class="job-salary">$140k–$180k</div>
+                <button class="save-btn" type="button" aria-label="Save job">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="job-meta">
+              <span class="tag">Full-time</span>
+              <span class="tag">Remote</span>
+              <span class="tag">Healthcare</span>
+              <span class="tag">Senior level</span>
+            </div>
+            <div class="job-time">Posted 2 days ago</div>
+          </div>
+        </a>
+
+        <a href="job.html" class="job-card"
+           data-title="Marketing Manager"
+           data-company="Northwind Co."
+           data-tags="Full-time,Hybrid,B2B,SaaS,Mid-level"
+           data-salary-min="95" data-salary-max="120"
+           data-posted="3">
+          <div class="job-logo">N</div>
+          <div class="job-body">
+            <div class="job-title-row">
+              <div>
+                <div class="job-title">Marketing Manager</div>
+                <div class="job-company">Northwind Co. · New York, NY</div>
+              </div>
+              <div class="flex items-center">
+                <div class="job-salary">$95k–$120k</div>
+                <button class="save-btn" type="button" aria-label="Save job">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="job-meta">
+              <span class="tag">Full-time</span>
+              <span class="tag">Hybrid</span>
+              <span class="tag">B2B</span>
+              <span class="tag">SaaS</span>
+            </div>
+            <div class="job-time">Posted 3 days ago</div>
+          </div>
+        </a>
+
+        <a href="job.html" class="job-card"
+           data-title="Backend Engineer"
+           data-company="Lumen Labs"
+           data-tags="Full-time,Remote,Python,PostgreSQL,Mid-level"
+           data-salary-min="160" data-salary-max="200"
+           data-posted="1">
+          <div class="job-logo">L</div>
+          <div class="job-body">
+            <div class="job-title-row">
+              <div>
+                <div class="job-title">Backend Engineer</div>
+                <div class="job-company">Lumen Labs · Remote · Worldwide</div>
+              </div>
+              <div class="flex items-center">
+                <div class="job-salary">$160k–$200k</div>
+                <button class="save-btn" type="button" aria-label="Save job">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="job-meta">
+              <span class="tag">Full-time</span>
+              <span class="tag">Python</span>
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">Remote</span>
+            </div>
+            <div class="job-time">Posted 1 day ago</div>
+          </div>
+        </a>
+
+        <a href="job.html" class="job-card"
+           data-title="Customer Success Lead"
+           data-company="Verity Finance"
+           data-tags="Full-time,On-site,Finance,Mid-level"
+           data-salary-min="85" data-salary-max="110"
+           data-posted="5">
+          <div class="job-logo">V</div>
+          <div class="job-body">
+            <div class="job-title-row">
+              <div>
+                <div class="job-title">Customer Success Lead</div>
+                <div class="job-company">Verity Finance · Austin, TX</div>
+              </div>
+              <div class="flex items-center">
+                <div class="job-salary">$85k–$110k</div>
+                <button class="save-btn" type="button" aria-label="Save job">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="job-meta">
+              <span class="tag">Full-time</span>
+              <span class="tag">On-site</span>
+              <span class="tag">Finance</span>
+            </div>
+            <div class="job-time">Posted 5 days ago</div>
+          </div>
+        </a>
+
+        <a href="job.html" class="job-card"
+           data-title="Data Scientist, Growth"
+           data-company="Solstice Media"
+           data-tags="Full-time,Hybrid,SQL,Python,Senior level"
+           data-salary-min="150" data-salary-max="190"
+           data-posted="0">
+          <div class="job-logo">S</div>
+          <div class="job-body">
+            <div class="job-title-row">
+              <div>
+                <div class="job-title">Data Scientist, Growth</div>
+                <div class="job-company">Solstice Media · San Francisco, CA · Hybrid</div>
+              </div>
+              <div class="flex items-center">
+                <div class="job-salary">$150k–$190k</div>
+                <button class="save-btn" type="button" aria-label="Save job">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="job-meta">
+              <span class="tag">Full-time</span>
+              <span class="tag">Hybrid</span>
+              <span class="tag">SQL</span>
+              <span class="tag">Python</span>
+            </div>
+            <div class="job-time">Posted today</div>
+          </div>
+        </a>
+
+        <a href="job.html" class="job-card"
+           data-title="Registered Nurse, ICU"
+           data-company="Meridian Hospital"
+           data-tags="Full-time,On-site,Healthcare,Entry level"
+           data-salary-min="78" data-salary-max="98"
+           data-posted="4">
+          <div class="job-logo">M</div>
+          <div class="job-body">
+            <div class="job-title-row">
+              <div>
+                <div class="job-title">Registered Nurse, ICU</div>
+                <div class="job-company">Meridian Hospital · Chicago, IL</div>
+              </div>
+              <div class="flex items-center">
+                <div class="job-salary">$78k–$98k</div>
+                <button class="save-btn" type="button" aria-label="Save job">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="job-meta">
+              <span class="tag">Full-time</span>
+              <span class="tag">On-site</span>
+              <span class="tag">Healthcare</span>
+            </div>
+            <div class="job-time">Posted 4 days ago</div>
+          </div>
+        </a>
+
+        <a href="job.html" class="job-card"
+           data-title="High School Math Teacher"
+           data-company="Thornbridge Academy"
+           data-tags="Full-time,On-site,Education,Entry level"
+           data-salary-min="62" data-salary-max="82"
+           data-posted="7">
+          <div class="job-logo">T</div>
+          <div class="job-body">
+            <div class="job-title-row">
+              <div>
+                <div class="job-title">High School Math Teacher</div>
+                <div class="job-company">Thornbridge Academy · Boston, MA</div>
+              </div>
+              <div class="flex items-center">
+                <div class="job-salary">$62k–$82k</div>
+                <button class="save-btn" type="button" aria-label="Save job">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="job-meta">
+              <span class="tag">Full-time</span>
+              <span class="tag">On-site</span>
+              <span class="tag">Education</span>
+            </div>
+            <div class="job-time">Posted 1 week ago</div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <h3>No jobs match your filters</h3>
+        <p>Try adjusting your search terms or clearing some filters to see more results.</p>
+      </div>
+      <div class="pager" id="pager" style="margin-top:32px;"></div>
+    </main>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+          </span>
+          Pathway
+        </a>
+        <p>Helping people find work they love — and helping companies find the people they need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>For job seekers</h4>
+        <ul>
+          <li><a href="jobs.html">Browse jobs</a></li>
+          <li><a href="profile.html">Your profile</a></li>
+          <li><a href="#">Career advice</a></li>
+          <li><a href="#">Salary guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>For employers</h4>
+        <ul>
+          <li><a href="employers.html">Post a job</a></li>
+          <li><a href="employers.html">Pricing</a></li>
+          <li><a href="#">Hiring resources</a></li>
+          <li><a href="#">Contact sales</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Pathway. All rights reserved.</div>
+      <div>Made with care.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ---- Toast ----
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ---- Mobile nav ----
+  (function() {
+    const toggle = document.getElementById('navToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    if (!toggle || !mobileNav) return;
+    toggle.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+    });
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target) && !mobileNav.contains(e.target)) {
+        mobileNav.classList.remove('open');
+        toggle.classList.remove('open');
+      }
+    });
+  })();
+
+  // ---- Bookmark toggle (fixed logic) ----
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.save-btn');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const isSaved = btn.classList.toggle('saved');
+    const svg = btn.querySelector('svg');
+    svg.setAttribute('fill', isSaved ? 'currentColor' : 'none');
+    showToast(isSaved ? 'Job saved' : 'Job removed from saved');
+  });
+
+  // ---- Filtering + Search + Sort ----
+  const allCards = Array.from(document.querySelectorAll('#jobResults .job-card'));
+  const ITEMS_PER_PAGE = 5;
+  let currentPage = 1;
+
+  function getActiveFilters() {
+    const filters = { type: [], arrangement: [], experience: [], salary: [], date: 999 };
+    document.querySelectorAll('input[data-filter]:checked').forEach(inp => {
+      const f = inp.dataset.filter;
+      const v = inp.dataset.value;
+      if (f === 'date') filters.date = parseInt(v);
+      else if (Array.isArray(filters[f])) filters[f].push(v.toLowerCase());
+    });
+    return filters;
+  }
+
+  function matchesCard(card, query, filters) {
+    const title = card.dataset.title.toLowerCase();
+    const company = card.dataset.company.toLowerCase();
+    const tags = card.dataset.tags.toLowerCase();
+    const salaryMin = parseInt(card.dataset.salaryMin);
+    const posted = parseInt(card.dataset.posted);
+
+    // Search query
+    if (query) {
+      const q = query.toLowerCase();
+      if (!title.includes(q) && !company.includes(q) && !tags.includes(q)) return false;
+    }
+
+    // Job type filter
+    if (filters.type.length) {
+      if (!filters.type.some(t => tags.includes(t))) return false;
+    }
+
+    // Work arrangement
+    if (filters.arrangement.length) {
+      if (!filters.arrangement.some(a => tags.includes(a))) return false;
+    }
+
+    // Experience
+    if (filters.experience.length) {
+      const expMap = { 'entry level': 'entry level', 'mid-level': 'mid-level', 'senior': 'senior', 'lead / manager': 'lead' };
+      if (!filters.experience.some(e => tags.includes(expMap[e] || e))) return false;
+    }
+
+    // Salary
+    if (filters.salary.length) {
+      const minRequired = Math.max(...filters.salary.map(Number));
+      if (salaryMin < minRequired) return false;
+    }
+
+    // Date
+    if (filters.date !== 999 && posted > filters.date) return false;
+
+    return true;
+  }
+
+  function getSortedFiltered() {
+    const query = document.getElementById('jobSearchInput').value.trim();
+    const filters = getActiveFilters();
+    const sort = document.getElementById('sortSelect').value;
+
+    let visible = allCards.filter(card => matchesCard(card, query, filters));
+
+    visible.sort((a, b) => {
+      if (sort === 'recent') return parseInt(a.dataset.posted) - parseInt(b.dataset.posted);
+      if (sort === 'salary-high') return parseInt(b.dataset.salaryMin) - parseInt(a.dataset.salaryMin);
+      if (sort === 'salary-low') return parseInt(a.dataset.salaryMin) - parseInt(b.dataset.salaryMin);
+      return 0;
+    });
+
+    return visible;
+  }
+
+  function renderPage() {
+    const visible = getSortedFiltered();
+    const total = visible.length;
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const pageItems = visible.slice(start, start + ITEMS_PER_PAGE);
+
+    // Show/hide all cards
+    allCards.forEach(c => c.style.display = 'none');
+    pageItems.forEach(c => c.style.display = '');
+
+    // Update count
+    document.getElementById('resultsCount').innerHTML =
+      '<strong>' + total + '</strong> matching result' + (total !== 1 ? 's' : '');
+
+    // Empty state
+    document.getElementById('emptyState').style.display = total === 0 ? '' : 'none';
+
+    // Pagination
+    renderPager(total);
+  }
+
+  function renderPager(total) {
+    const pages = Math.ceil(total / ITEMS_PER_PAGE);
+    const pager = document.getElementById('pager');
+    if (pages <= 1) { pager.innerHTML = ''; return; }
+
+    let html = '<button id="pPrev">‹</button>';
+    for (let i = 1; i <= pages; i++) {
+      html += `<button class="${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+    }
+    html += '<button id="pNext">›</button>';
+    pager.innerHTML = html;
+
+    pager.querySelector('#pPrev').addEventListener('click', () => {
+      if (currentPage > 1) { currentPage--; renderPage(); window.scrollTo({top: 300, behavior:'smooth'}); }
+    });
+    pager.querySelector('#pNext').addEventListener('click', () => {
+      if (currentPage < pages) { currentPage++; renderPage(); window.scrollTo({top: 300, behavior:'smooth'}); }
+    });
+    pager.querySelectorAll('[data-page]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentPage = parseInt(btn.dataset.page);
+        renderPage();
+        window.scrollTo({top: 300, behavior:'smooth'});
+      });
+    });
+  }
+
+  function applyFilters() {
+    currentPage = 1;
+    renderPage();
+  }
+
+  // Search form
+  document.getElementById('jobSearchForm').addEventListener('submit', e => { e.preventDefault(); applyFilters(); });
+  document.getElementById('jobSearchInput').addEventListener('input', applyFilters);
+
+  // Filter checkboxes & radios
+  document.querySelectorAll('input[data-filter]').forEach(inp => {
+    inp.addEventListener('change', applyFilters);
+  });
+
+  // Sort
+  document.getElementById('sortSelect').addEventListener('change', applyFilters);
+
+  // Clear all
+  document.getElementById('clearFilters').addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('input[data-filter][type="checkbox"]').forEach(i => i.checked = false);
+    const dateInputs = document.querySelectorAll('input[data-filter="date"]');
+    dateInputs.forEach((i, idx) => i.checked = idx === 3); // "Any time"
+    document.getElementById('jobSearchInput').value = '';
+    applyFilters();
+  });
+
+  // URL params from index.html search
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('q')) document.getElementById('jobSearchInput').value = params.get('q');
+
+  // Initial render
+  renderPage();
+</script>
+
+</body>
+</html>

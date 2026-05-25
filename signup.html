@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create your account — Pathway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .pw-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+        </span>
+        Pathway
+      </a>
+    </div>
+
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-sub">Free forever for job seekers.</p>
+
+    <div class="role-grid" id="roleGrid">
+      <div class="role-card selected" data-role="seeker">
+        <div class="role-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div class="role-name">I'm looking for work</div>
+        <div class="role-desc">Browse jobs &amp; apply</div>
+      </div>
+      <div class="role-card" data-role="employer">
+        <div class="role-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-7L11 5H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg>
+        </div>
+        <div class="role-name">I'm hiring</div>
+        <div class="role-desc">Post jobs &amp; find talent</div>
+      </div>
+    </div>
+
+    <form onsubmit="event.preventDefault(); window.location.href='profile.html';">
+      <input type="hidden" id="roleInput" name="role" value="seeker">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="firstName">First name</label>
+          <input class="input" type="text" id="firstName" name="firstName" placeholder="Alex" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="lastName">Last name</label>
+          <input class="input" type="text" id="lastName" name="lastName" placeholder="Morgan" required>
+        </div>
+      </div>
+
+      <div class="form-group" id="companyGroup" style="display:none;">
+        <label class="form-label" for="company">Company name</label>
+        <input class="input" type="text" id="company" name="company" placeholder="Acme Inc.">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Work email</label>
+        <input class="input" type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="input" type="password" id="password" name="password" placeholder="Create a password" minlength="8" required>
+        <div class="pw-hint">At least 8 characters.</div>
+      </div>
+
+      <div class="checkbox-row" style="margin-bottom: 20px;">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">I agree to the <a href="#" style="color: var(--purple-700); font-weight: 600;">Terms of Service</a> and <a href="#" style="color: var(--purple-700); font-weight: 600;">Privacy Policy</a>.</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg">Create account</button>
+    </form>
+
+    <p class="auth-foot">
+      Already have an account? <a href="signin.html">Sign in</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  const grid = document.getElementById('roleGrid');
+  const roleInput = document.getElementById('roleInput');
+  const companyGroup = document.getElementById('companyGroup');
+  const companyField = document.getElementById('company');
+
+  grid.addEventListener('click', (e) => {
+    const card = e.target.closest('.role-card');
+    if (!card) return;
+    grid.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    const role = card.dataset.role;
+    roleInput.value = role;
+    if (role === 'employer') {
+      companyGroup.style.display = '';
+      companyField.required = true;
+    } else {
+      companyGroup.style.display = 'none';
+      companyField.required = false;
+    }
+  });
+</script>
+
+</body>
+</html>

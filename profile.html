@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your profile — Pathway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .profile-page {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+    padding: 32px 0 64px;
+  }
+
+  /* Profile header */
+  .profile-banner {
+    height: 140px;
+    background: linear-gradient(135deg, var(--purple-700), var(--purple-500), var(--purple-300));
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .profile-head {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    padding: 0 32px 28px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .avatar {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple-600), var(--purple-800));
+    border: 5px solid var(--surface);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-size: 44px;
+    font-weight: 800;
+    margin-top: -60px;
+    margin-bottom: 12px;
+  }
+  .profile-head h1 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .profile-headline {
+    color: var(--text);
+    font-size: 16px;
+    margin-top: 4px;
+  }
+  .profile-loc {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .profile-loc svg { width: 14px; height: 14px; }
+  .profile-head-actions {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    display: flex;
+    gap: 8px;
+  }
+  .head-meta {
+    display: flex;
+    gap: 18px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .head-meta strong { color: var(--text); font-weight: 700; }
+
+  /* Sections */
+  .section-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .section-card .section-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  .section-card h2 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .icon-btn {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--purple-50);
+    color: var(--purple-700);
+    display: grid;
+    place-items: center;
+    transition: all .15s ease;
+  }
+  .icon-btn:hover { background: var(--purple-100); }
+  .icon-btn svg { width: 16px; height: 16px; }
+
+  .bio { color: var(--text); line-height: 1.7; font-size: 15px; }
+
+  /* Skills */
+  .skills-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-pill {
+    padding: 6px 14px;
+    background: var(--purple-100);
+    color: var(--purple-800);
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Experience / education timeline */
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .timeline-item:first-child { padding-top: 0; }
+  .timeline-item:last-child { padding-bottom: 0; border-bottom: none; }
+  .org-logo {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: var(--purple-100);
+    color: var(--purple-800);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .timeline-body { flex: 1; }
+  .timeline-title {
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .timeline-sub {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 2px 0 6px;
+  }
+  .timeline-date {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .timeline-desc {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Sidebar */
+  .sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .sidebar-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .completeness {
+    text-align: center;
+  }
+  .ring {
+    width: 110px; height: 110px;
+    margin: 4px auto 12px;
+  }
+  .ring-percent {
+    font-size: 24px;
+    font-weight: 800;
+    fill: var(--purple-800);
+  }
+  .completeness p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .applications-list { display: flex; flex-direction: column; gap: 12px; }
+  .app-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+  }
+  .app-status {
+    margin-left: auto;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .app-status.applied { background: var(--purple-100); color: var(--purple-800); }
+  .app-status.interview { background: #FEF3C7; color: #92400E; }
+  .app-status.review { background: #DBEAFE; color: #1E40AF; }
+  .app-row .t { font-weight: 600; font-size: 13px; }
+  .app-row .c { font-size: 12px; color: var(--text-muted); }
+
+  /* Edit mode styling */
+  body.editing .view-only { display: none; }
+  body:not(.editing) .edit-only { display: none; }
+  .edit-only.inline { display: none; }
+  body.editing .edit-only.inline { display: inline; }
+
+  .edit-banner {
+    background: var(--purple-100);
+    border: 1px solid var(--purple-300);
+    color: var(--purple-800);
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .edit-banner-actions { display: flex; gap: 8px; }
+
+  @media (max-width: 860px) {
+    .profile-page { grid-template-columns: 1fr; }
+    .profile-head-actions {
+      position: static;
+      margin: 18px 0 0;
+      justify-content: flex-end;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+      </span>
+      Pathway
+    </a>
+    <div class="nav-links">
+      <a href="jobs.html">Browse jobs</a>
+      <a href="index.html#how">How it works</a>
+      <a href="employers.html">For employers</a>
+      <a href="profile.html" class="active">Profile</a>
+    </div>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn btn-ghost">Sign out</a>
+      <a href="jobs.html" class="btn btn-primary">Find jobs</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="jobs.html">Browse jobs</a>
+  <a href="index.html#how">How it works</a>
+  <a href="employers.html">For employers</a>
+  <a href="profile.html" class="active">Profile</a>
+  <div class="divider-line"></div>
+  <a href="signin.html" class="btn btn-ghost">Sign out</a>
+  <a href="jobs.html" class="btn btn-primary">Find jobs</a>
+</div>
+
+<div class="container">
+  <div class="edit-only edit-banner">
+    <span>✏️ Editing your profile — click <strong>Save</strong> to keep changes.</span>
+    <div class="edit-banner-actions">
+      <button class="btn btn-outline btn-sm" type="button" onclick="cancelEdit()">Cancel</button>
+      <button class="btn btn-primary btn-sm" type="button" onclick="saveProfile()">Save changes</button>
+      <button type="button" onclick="setEditMode(false)" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-muted);padding:0 4px;line-height:1;" aria-label="Close">×</button>
+    </div>
+  </div>
+
+  <div class="profile-page">
+
+    <!-- MAIN -->
+    <main>
+      <!-- Profile header -->
+      <div class="profile-banner"></div>
+      <div class="profile-head">
+        <div class="avatar">AM</div>
+        <div class="profile-head-actions view-only">
+          <button class="btn btn-outline btn-sm" type="button" onclick="setEditMode(true)">Edit profile</button>
+          <button class="btn btn-ghost btn-sm" type="button">Share</button>
+        </div>
+
+        <!-- View mode -->
+        <div class="view-only">
+          <h1>Alex Morgan</h1>
+          <div class="profile-headline">Senior Product Designer · 8 years in healthcare &amp; fintech</div>
+          <div class="profile-loc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Brooklyn, NY · Open to remote
+          </div>
+        </div>
+
+        <!-- Edit mode -->
+        <div class="edit-only">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">First name</label>
+              <input class="input" type="text" value="Alex">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last name</label>
+              <input class="input" type="text" value="Morgan">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Headline</label>
+            <input class="input" type="text" value="Senior Product Designer · 8 years in healthcare & fintech">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input class="input" type="text" value="Brooklyn, NY">
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="openremote" checked>
+            <label for="openremote">Open to remote opportunities</label>
+          </div>
+        </div>
+
+        <div class="head-meta view-only">
+          <span><strong>1,204</strong> profile views</span>
+          <span><strong>32</strong> applications sent</span>
+          <span><strong>12</strong> jobs saved</span>
+        </div>
+      </div>
+
+      <!-- About -->
+      <section class="section-card">
+        <div class="section-card-head">
+          <h2>About</h2>
+          <button class="icon-btn view-only" type="button" onclick="setEditMode(true)" aria-label="Edit about">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+        </div>
+        <p class="bio view-only">
+          Product designer focused on consumer healthcare. I love working at the intersection of design, research, and lived experience — building products that make people feel taken care of, not just served.
+          Currently exploring opportunities where I can lead a small design team and own a meaningful surface end-to-end.
+        </p>
+        <textarea class="textarea edit-only" rows="5">Product designer focused on consumer healthcare. I love working at the intersection of design, research, and lived experience — building products that make people feel taken care of, not just served.
+Currently exploring opportunities where I can lead a small design team and own a meaningful surface end-to-end.</textarea>
+      </section>
+
+      <!-- Skills -->
+      <section class="section-card">
+        <div class="section-card-head">
+          <h2>Skills</h2>
+          <button class="icon-btn view-only" type="button" onclick="setEditMode(true)" aria-label="Edit skills">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+        </div>
+        <div class="skills-list view-only">
+          <span class="skill-pill">Product Design</span>
+          <span class="skill-pill">UX Research</span>
+          <span class="skill-pill">Figma</span>
+          <span class="skill-pill">Design Systems</span>
+          <span class="skill-pill">Prototyping</span>
+          <span class="skill-pill">Accessibility</span>
+          <span class="skill-pill">User Interviews</span>
+          <span class="skill-pill">Mobile Design</span>
+          <span class="skill-pill">Healthcare UX</span>
+        </div>
+        <div class="edit-only">
+          <input class="input" type="text" value="Product Design, UX Research, Figma, Design Systems, Prototyping, Accessibility, User Interviews, Mobile Design, Healthcare UX" placeholder="Comma-separated skills">
+          <div class="form-hint mt-2">Separate skills with commas. We'll match you to roles that want these.</div>
+        </div>
+      </section>
+
+      <!-- Experience -->
+      <section class="section-card">
+        <div class="section-card-head">
+          <h2>Experience</h2>
+          <button class="icon-btn" type="button" aria-label="Add experience">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+
+        <div class="timeline-item">
+          <div class="org-logo">L</div>
+          <div class="timeline-body">
+            <div class="timeline-title">Senior Product Designer</div>
+            <div class="timeline-sub">Lumen Labs</div>
+            <div class="timeline-date">May 2022 — Present · 3 yrs</div>
+            <div class="timeline-desc">
+              Lead designer on the patient-facing mobile app, used by 200k+ weekly users. Shipped the new appointment flow that lifted weekly booking rate by 31%.
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="org-logo">V</div>
+          <div class="timeline-body">
+            <div class="timeline-title">Product Designer</div>
+            <div class="timeline-sub">Verity Finance</div>
+            <div class="timeline-date">Aug 2019 — May 2022 · 2 yrs 9 mos</div>
+            <div class="timeline-desc">
+              Designed the onboarding and account dashboard for a consumer banking app. Co-built the company's first design system.
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="org-logo">N</div>
+          <div class="timeline-body">
+            <div class="timeline-title">Junior Designer</div>
+            <div class="timeline-sub">Northwind Co.</div>
+            <div class="timeline-date">Jul 2017 — Aug 2019 · 2 yrs 1 mo</div>
+            <div class="timeline-desc">
+              Started in marketing design and grew into product work over two years.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section class="section-card">
+        <div class="section-card-head">
+          <h2>Education</h2>
+          <button class="icon-btn" type="button" aria-label="Add education">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <div class="timeline-item">
+          <div class="org-logo">R</div>
+          <div class="timeline-body">
+            <div class="timeline-title">B.F.A., Communication Design</div>
+            <div class="timeline-sub">Rhode Island School of Design</div>
+            <div class="timeline-date">2013 — 2017</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="sidebar-card completeness">
+        <h3>Profile strength</h3>
+        <svg class="ring" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--purple-100)" stroke-width="12"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--purple-700)" stroke-width="12"
+            stroke-dasharray="314" stroke-dashoffset="63" stroke-linecap="round"
+            transform="rotate(-90 60 60)"/>
+          <text x="60" y="68" text-anchor="middle" class="ring-percent">80%</text>
+        </svg>
+        <p>Add a portfolio link and education details to reach 100%.</p>
+        <button class="btn btn-primary btn-sm btn-full" type="button" onclick="setEditMode(true)">Complete profile</button>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Recent applications</h3>
+        <div class="applications-list">
+          <div class="app-row">
+            <div class="org-logo" style="width:36px;height:36px;font-size:14px;">A</div>
+            <div>
+              <div class="t">Senior Product Designer</div>
+              <div class="c">Aria Health</div>
+            </div>
+            <span class="app-status interview">Interview</span>
+          </div>
+          <div class="app-row">
+            <div class="org-logo" style="width:36px;height:36px;font-size:14px;">S</div>
+            <div>
+              <div class="t">Lead Designer</div>
+              <div class="c">Solstice Media</div>
+            </div>
+            <span class="app-status review">In review</span>
+          </div>
+          <div class="app-row">
+            <div class="org-logo" style="width:36px;height:36px;font-size:14px;">M</div>
+            <div>
+              <div class="t">Product Designer</div>
+              <div class="c">Meridian Hospital</div>
+            </div>
+            <span class="app-status applied">Applied</span>
+          </div>
+        </div>
+        <a href="jobs.html" class="btn btn-outline btn-sm btn-full" style="margin-top: 14px;">View all applications</a>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Contact</h3>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="input" type="email" value="alex.morgan@example.com" readonly>
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">Portfolio</label>
+          <input class="input" type="url" placeholder="https://yoursite.com">
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+          </span>
+          Pathway
+        </a>
+        <p>Helping people find work they love — and helping companies find the people they need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>For job seekers</h4>
+        <ul>
+          <li><a href="jobs.html">Browse jobs</a></li>
+          <li><a href="profile.html">Your profile</a></li>
+          <li><a href="#">Career advice</a></li>
+          <li><a href="#">Salary guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>For employers</h4>
+        <ul>
+          <li><a href="#">Post a job</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Hiring resources</a></li>
+          <li><a href="#">Contact sales</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Pathway. All rights reserved.</div>
+      <div>Made with care.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- Toast ----
+  function showToast(msg) {
+    let t = document.getElementById('toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'toast';
+      t.className = 'toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ---- Mobile nav ----
+  (function() {
+    const toggle = document.getElementById('navToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    if (!toggle || !mobileNav) return;
+    toggle.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+    });
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target) && !mobileNav.contains(e.target)) {
+        mobileNav.classList.remove('open');
+        toggle.classList.remove('open');
+      }
+    });
+  })();
+
+  // ---- Edit mode ----
+  // Store originals when entering edit mode for cancel
+  let _snapshot = null;
+
+  function setEditMode(on) {
+    document.body.classList.toggle('editing', on);
+    if (on) {
+      // Save snapshot of all editable fields
+      _snapshot = {};
+      document.querySelectorAll('.edit-only input, .edit-only textarea').forEach((el, i) => {
+        _snapshot[i] = el.type === 'checkbox' ? el.checked : el.value;
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function cancelEdit() {
+    if (_snapshot) {
+      document.querySelectorAll('.edit-only input, .edit-only textarea').forEach((el, i) => {
+        if (el.type === 'checkbox') el.checked = _snapshot[i];
+        else el.value = _snapshot[i];
+      });
+    }
+    setEditMode(false);
+    showToast('Changes discarded');
+  }
+
+  function saveProfile() {
+    // Sync editable inputs back to view-only elements where possible
+    const firstName = document.querySelector('.edit-only input[placeholder="Alex"]')?.value || '';
+    const lastName = document.querySelector('.edit-only input[placeholder="Morgan"]')?.value || '';
+    const headline = document.querySelector('.edit-only input[value*="Product Designer"]')?.value
+      || document.querySelector('.edit-only input[placeholder*="Headline"]')?.value || '';
+    const bio = document.querySelector('.edit-only textarea');
+    const skillsInput = document.querySelector('.edit-only input[placeholder*="skills"]');
+
+    if (firstName || lastName) {
+      const h1 = document.querySelector('.profile-head h1');
+      if (h1) h1.textContent = (firstName + ' ' + lastName).trim();
+      const avatar = document.querySelector('.avatar');
+      if (avatar) avatar.textContent = ((firstName[0] || '') + (lastName[0] || '')).toUpperCase();
+    }
+    if (headline) {
+      const hl = document.querySelector('.profile-headline');
+      if (hl) hl.textContent = headline;
+    }
+    if (bio) {
+      const bioView = document.querySelector('.bio.view-only');
+      if (bioView) bioView.textContent = bio.value;
+    }
+    if (skillsInput) {
+      const skillsList = document.querySelector('.skills-list.view-only');
+      if (skillsList) {
+        skillsList.innerHTML = skillsInput.value.split(',')
+          .map(s => s.trim()).filter(Boolean)
+          .map(s => `<span class="skill-pill">${s}</span>`).join('');
+      }
+    }
+
+    setEditMode(false);
+    showToast('✓ Profile saved');
+  }
+</script>
+</body>
+</html>

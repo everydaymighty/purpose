@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Senior Product Designer at Aria Health — Pathway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .breadcrumb {
+    padding: 24px 0 0;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .breadcrumb a { color: var(--purple-700); font-weight: 500; }
+  .breadcrumb a:hover { text-decoration: underline; }
+
+  .job-page {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+    padding: 24px 0 64px;
+  }
+
+  .job-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .job-hero .job-logo {
+    width: 72px; height: 72px;
+    font-size: 28px;
+    border-radius: 14px;
+  }
+  .job-hero h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .job-hero .company-line {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+  .job-hero .company-line a {
+    color: var(--purple-700);
+    font-weight: 600;
+  }
+  .job-hero .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .job-actions {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    min-width: 200px;
+  }
+  .job-actions .salary {
+    color: var(--purple-700);
+    font-weight: 800;
+    font-size: 22px;
+  }
+  .job-actions .salary-sub {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .job-body-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+  .job-body-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .job-body-section p,
+  .job-body-section ul,
+  .job-body-section ol {
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .job-body-section p + p { margin-top: 12px; }
+  .job-body-section ul,
+  .job-body-section ol {
+    margin: 12px 0 0 22px;
+  }
+  .job-body-section li { margin-bottom: 8px; }
+
+  .sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .sidebar-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .sidebar-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-row:last-child { border-bottom: none; }
+  .sidebar-row .k { color: var(--text-muted); }
+  .sidebar-row .v { font-weight: 600; color: var(--text); }
+
+  .company-logo-big {
+    width: 56px; height: 56px;
+    border-radius: 12px;
+    background: var(--purple-100);
+    color: var(--purple-800);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
+  .similar-jobs { display: flex; flex-direction: column; gap: 10px; }
+  .similar-jobs a {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    display: block;
+    transition: all .15s ease;
+  }
+  .similar-jobs a:hover { border-color: var(--purple-300); background: var(--purple-50); }
+  .similar-jobs .t { font-weight: 700; font-size: 14px; }
+  .similar-jobs .c { font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 860px) {
+    .job-page { grid-template-columns: 1fr; }
+    .job-hero { flex-direction: column; }
+    .job-actions { margin-left: 0; align-items: stretch; }
+    .job-actions .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+      </span>
+      Pathway
+    </a>
+    <div class="nav-links">
+      <a href="jobs.html" class="active">Browse jobs</a>
+      <a href="index.html#how">How it works</a>
+      <a href="employers.html">For employers</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn btn-ghost">Sign in</a>
+      <a href="signup.html" class="btn btn-primary">Get started</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="jobs.html" class="active">Browse jobs</a>
+  <a href="index.html#how">How it works</a>
+  <a href="employers.html">For employers</a>
+  <a href="profile.html">Profile</a>
+  <div class="divider-line"></div>
+  <a href="signin.html" class="btn btn-ghost">Sign in</a>
+  <a href="signup.html" class="btn btn-primary">Get started</a>
+</div>
+
+<div class="container">
+  <div class="breadcrumb">
+    <a href="jobs.html">← Back to jobs</a>
+  </div>
+
+  <div class="job-page">
+
+    <!-- MAIN CONTENT -->
+    <main>
+      <div class="job-hero">
+        <div class="job-logo">A</div>
+        <div>
+          <h1>Senior Product Designer</h1>
+          <div class="company-line">
+            <a href="#">Aria Health</a> · Remote · United States
+          </div>
+          <div class="meta">
+            <span class="tag">Full-time</span>
+            <span class="tag">Remote</span>
+            <span class="tag">Healthcare</span>
+            <span class="tag">Senior level</span>
+          </div>
+        </div>
+        <div class="job-actions">
+          <div>
+            <div class="salary">$140k – $180k</div>
+            <div class="salary-sub">Base salary · USD</div>
+          </div>
+          <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="openApplyModal()">Apply now</button>
+          <button class="btn btn-outline" id="saveJobBtn" style="width: 100%;" type="button" onclick="toggleSaveJob(this)">
+            <svg id="saveIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+            <span id="saveLabel">Save job</span>
+          </button>
+        </div>
+      </div>
+
+      <section class="job-body-section">
+        <h2>About the role</h2>
+        <p>Aria Health is reshaping how patients interact with their care teams. We're hiring a Senior Product Designer to lead the design of our patient-facing mobile experience — a product used by hundreds of thousands of people every week to schedule visits, message their doctors, and track their treatment plans.</p>
+        <p>You'll partner closely with product, engineering, and clinical research to ship designs that are accessible, evidence-based, and genuinely care about the people on the other side of the screen.</p>
+      </section>
+
+      <section class="job-body-section">
+        <h2>What you'll do</h2>
+        <ul>
+          <li>Own the end-to-end design of our patient mobile experience — from research through launch.</li>
+          <li>Lead design discovery and run usability sessions with patients of varied ages and abilities.</li>
+          <li>Contribute to and evolve our design system, ensuring consistency across web and mobile.</li>
+          <li>Partner with engineers to ship pixel-precise work and stay involved through release.</li>
+          <li>Mentor mid-level designers and help raise the craft bar across the team.</li>
+        </ul>
+      </section>
+
+      <section class="job-body-section">
+        <h2>What we're looking for</h2>
+        <ul>
+          <li>5+ years of product design experience, with at least 2 years on consumer mobile.</li>
+          <li>A portfolio that shows clear thinking, visual craft, and impact — not just polished screens.</li>
+          <li>Comfort running your own research and translating findings into design decisions.</li>
+          <li>Experience designing for accessibility (WCAG 2.1 AA) and across a wide range of devices.</li>
+          <li>Bonus: prior experience designing in healthcare, fintech, or other regulated industries.</li>
+        </ul>
+      </section>
+
+      <section class="job-body-section">
+        <h2>Benefits</h2>
+        <ul>
+          <li>Fully remote across the US, with quarterly team gatherings.</li>
+          <li>Comprehensive medical, dental, and vision insurance.</li>
+          <li>$2,500 yearly home-office stipend and a $1,500 learning budget.</li>
+          <li>Unlimited PTO with a 3-week minimum.</li>
+          <li>Meaningful equity in a growing company.</li>
+        </ul>
+      </section>
+
+      <button class="btn btn-primary btn-lg" style="margin-top: 8px;" onclick="openApplyModal()">Apply now</button>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="sidebar-card">
+        <h3>Job overview</h3>
+        <div class="sidebar-row"><span class="k">Posted</span><span class="v">2 days ago</span></div>
+        <div class="sidebar-row"><span class="k">Applications</span><span class="v">42 so far</span></div>
+        <div class="sidebar-row"><span class="k">Type</span><span class="v">Full-time</span></div>
+        <div class="sidebar-row"><span class="k">Experience</span><span class="v">Senior (5+ yrs)</span></div>
+        <div class="sidebar-row"><span class="k">Location</span><span class="v">Remote (US)</span></div>
+        <div class="sidebar-row"><span class="k">Visa</span><span class="v">No sponsorship</span></div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="company-logo-big">A</div>
+        <h3 style="margin-bottom: 4px;">About Aria Health</h3>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 12px;">
+          A digital health company building tools that make care simpler — for patients and providers alike.
+        </p>
+        <div class="sidebar-row"><span class="k">Industry</span><span class="v">Healthcare</span></div>
+        <div class="sidebar-row"><span class="k">Size</span><span class="v">200–500</span></div>
+        <div class="sidebar-row"><span class="k">Founded</span><span class="v">2019</span></div>
+        <a href="#" class="btn btn-outline btn-sm" style="width: 100%; margin-top: 12px;">View company</a>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Similar jobs</h3>
+        <div class="similar-jobs">
+          <a href="job.html">
+            <div class="t">Product Designer</div>
+            <div class="c">Lumen Labs · Remote · $120k–$160k</div>
+          </a>
+          <a href="job.html">
+            <div class="t">Senior UX Researcher</div>
+            <div class="c">Meridian Hospital · Hybrid</div>
+          </a>
+          <a href="job.html">
+            <div class="t">Staff Product Designer</div>
+            <div class="c">Solstice Media · Remote · $170k–$210k</div>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+          </span>
+          Pathway
+        </a>
+        <p>Helping people find work they love — and helping companies find the people they need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>For job seekers</h4>
+        <ul>
+          <li><a href="jobs.html">Browse jobs</a></li>
+          <li><a href="profile.html">Your profile</a></li>
+          <li><a href="#">Career advice</a></li>
+          <li><a href="#">Salary guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>For employers</h4>
+        <ul>
+          <li><a href="#">Post a job</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Hiring resources</a></li>
+          <li><a href="#">Contact sales</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Pathway. All rights reserved.</div>
+      <div>Made with care.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- Apply Modal -->
+<div id="applyModal" style="display:none; position:fixed; inset:0; background:rgba(30,27,46,0.5); z-index:200; display:none; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--surface); border-radius:var(--radius-xl); padding:36px; max-width:480px; width:100%; box-shadow:var(--shadow-lg); position:relative;">
+    <button onclick="closeApplyModal()" style="position:absolute; top:16px; right:16px; background:var(--purple-50); border:none; width:32px; height:32px; border-radius:8px; font-size:18px; cursor:pointer; color:var(--text-muted);">×</button>
+    <h2 style="font-size:22px; font-weight:800; margin-bottom:6px;">Apply to Aria Health</h2>
+    <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Senior Product Designer · Remote · $140k–$180k</p>
+    <div class="form-group">
+      <label class="form-label">Full name</label>
+      <input class="input" type="text" placeholder="Alex Morgan" id="applyName">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="input" type="email" placeholder="you@example.com" id="applyEmail">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Cover note <span style="color:var(--text-muted); font-weight:400;">(optional)</span></label>
+      <textarea class="textarea" rows="4" placeholder="Why are you excited about this role?" id="applyCover"></textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">Resume / CV</label>
+      <input class="input" type="file" accept=".pdf,.doc,.docx" id="applyResume">
+    </div>
+    <div style="margin-top:22px; display:flex; gap:12px;">
+      <button class="btn btn-primary btn-lg" style="flex:1;" onclick="submitApplication()">Submit application</button>
+      <button class="btn btn-outline" onclick="closeApplyModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // Mobile nav
+  (function() {
+    const toggle = document.getElementById('navToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    if (!toggle || !mobileNav) return;
+    toggle.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+    });
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target) && !mobileNav.contains(e.target)) {
+        mobileNav.classList.remove('open');
+        toggle.classList.remove('open');
+      }
+    });
+  })();
+
+  // Toast
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // Save job toggle
+  let jobSaved = false;
+  function toggleSaveJob(btn) {
+    jobSaved = !jobSaved;
+    const icon = document.getElementById('saveIcon');
+    const label = document.getElementById('saveLabel');
+    icon.setAttribute('fill', jobSaved ? 'currentColor' : 'none');
+    icon.style.color = jobSaved ? 'var(--purple-700)' : '';
+    label.textContent = jobSaved ? 'Saved' : 'Save job';
+    btn.classList.toggle('btn-outline', !jobSaved);
+    showToast(jobSaved ? 'Job saved to your profile' : 'Job removed from saved');
+  }
+
+  // Apply modal
+  const modal = document.getElementById('applyModal');
+  function openApplyModal() {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeApplyModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  modal.addEventListener('click', e => { if (e.target === modal) closeApplyModal(); });
+
+  function submitApplication() {
+    const name = document.getElementById('applyName').value.trim();
+    const email = document.getElementById('applyEmail').value.trim();
+    if (!name || !email) { showToast('Please fill in your name and email.'); return; }
+    closeApplyModal();
+    showToast('✓ Application submitted to Aria Health!');
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For Employers — Pathway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .employer-hero { padding: 80px 0 64px; text-align: center; }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+    padding-bottom: 80px;
+  }
+  .pricing-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+  }
+  .pricing-card.featured {
+    border-color: var(--purple-400);
+    box-shadow: var(--shadow-md);
+    position: relative;
+  }
+  .pricing-card.featured::before {
+    content: 'Most popular';
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--purple-700); color: white;
+    padding: 4px 14px; border-radius: 999px;
+    font-size: 12px; font-weight: 700;
+  }
+  .price { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin: 16px 0 4px; }
+  .price-sub { color: var(--text-muted); font-size: 14px; margin-bottom: 22px; }
+  .features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .features li { font-size: 14px; color: var(--text); display: flex; gap: 8px; align-items: flex-start; }
+  .features li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
+  @media (max-width: 860px) { .pricing-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+      </span>
+      Pathway
+    </a>
+    <div class="nav-links">
+      <a href="jobs.html">Browse jobs</a>
+      <a href="index.html#how">How it works</a>
+      <a href="employers.html" class="active">For employers</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn btn-ghost">Sign in</a>
+      <a href="signup.html" class="btn btn-primary">Get started</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="jobs.html">Browse jobs</a>
+  <a href="index.html#how">How it works</a>
+  <a href="employers.html" class="active">For employers</a>
+  <a href="profile.html">Profile</a>
+  <div class="divider-line"></div>
+  <a href="signin.html" class="btn btn-ghost">Sign in</a>
+  <a href="signup.html" class="btn btn-primary">Get started</a>
+</div>
+
+<div class="container">
+  <div class="employer-hero">
+    <span class="section-eyebrow">For employers</span>
+    <h1 class="section-title" style="font-size: clamp(32px, 5vw, 52px); margin-top: 12px;">Hire smarter, hire faster</h1>
+    <p class="section-sub" style="margin-top: 12px;">Post jobs and connect with qualified candidates who are actively looking for roles like yours. Over 2 million job seekers on Pathway.</p>
+    <div style="margin-top: 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="signup.html" class="btn btn-primary btn-lg">Post your first job — free</a>
+      <a href="#pricing" class="btn btn-outline btn-lg">View pricing</a>
+    </div>
+  </div>
+
+  <div class="pricing-grid" id="pricing">
+    <div class="pricing-card">
+      <h3 style="font-weight:700; font-size:18px;">Starter</h3>
+      <div class="price">Free</div>
+      <div class="price-sub">1 active job posting</div>
+      <ul class="features">
+        <li>1 job listing for 30 days</li>
+        <li>Standard listing placement</li>
+        <li>Applicant dashboard</li>
+        <li>Email notifications</li>
+      </ul>
+      <a href="signup.html" class="btn btn-outline btn-full">Get started free</a>
+    </div>
+    <div class="pricing-card featured">
+      <h3 style="font-weight:700; font-size:18px;">Pro</h3>
+      <div class="price">$299</div>
+      <div class="price-sub">per job posting / 60 days</div>
+      <ul class="features">
+        <li>Promoted placement in search</li>
+        <li>Candidate shortlisting tools</li>
+        <li>Priority email support</li>
+        <li>Company profile page</li>
+        <li>ATS integrations (Greenhouse, Lever)</li>
+      </ul>
+      <a href="signup.html" class="btn btn-primary btn-full">Post a job</a>
+    </div>
+    <div class="pricing-card">
+      <h3 style="font-weight:700; font-size:18px;">Enterprise</h3>
+      <div class="price">Custom</div>
+      <div class="price-sub">volume pricing available</div>
+      <ul class="features">
+        <li>Unlimited job postings</li>
+        <li>Dedicated account manager</li>
+        <li>Custom candidate sourcing</li>
+        <li>Analytics & reporting</li>
+        <li>SLA & enterprise SSO</li>
+      </ul>
+      <a href="mailto:sales@pathway.com" class="btn btn-outline btn-full">Contact sales</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+          </span>
+          Pathway
+        </a>
+        <p>Helping people find work they love — and helping companies find the people they need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>For job seekers</h4>
+        <ul>
+          <li><a href="jobs.html">Browse jobs</a></li>
+          <li><a href="profile.html">Your profile</a></li>
+          <li><a href="#">Career advice</a></li>
+          <li><a href="#">Salary guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>For employers</h4>
+        <ul>
+          <li><a href="employers.html">Post a job</a></li>
+          <li><a href="employers.html#pricing">Pricing</a></li>
+          <li><a href="#">Hiring resources</a></li>
+          <li><a href="#">Contact sales</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Pathway. All rights reserved.</div>
+      <div>Made with care.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function() {
+    const toggle = document.getElementById('navToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    if (!toggle || !mobileNav) return;
+    toggle.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+    });
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target) && !mobileNav.contains(e.target)) {
+        mobileNav.classList.remove('open');
+        toggle.classList.remove('open');
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
