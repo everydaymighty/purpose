@@ -23,6 +23,21 @@
       linear-gradient(165deg, #e8e3ff 0%, #f0ecff 35%, #f8f6ff 65%, #eeeaff 100%);
   }
   .hero > .container { width: 100%; padding: 64px 24px 160px; }
+  /* Top edge blend: a soft veil that hides the hard line where nav meets hero */
+  .hero::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 120px;
+    background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(248, 246, 255, 0.5) 50%,
+      transparent 100%);
+    z-index: 4;
+    pointer-events: none;
+  }
+  /* Nav also gets the same blur fade-through so its edge is invisible */
+  body > nav.nav { box-shadow: 0 8px 22px rgba(255, 255, 255, 0.4); }
 
   /* Soft blend at the bottom edge of the hero so it melts into the
      body's lavender gradient instead of cutting off hard. */
@@ -224,6 +239,28 @@
     gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  /* Small pill bubble for "Sign in" in the nav */
+  .nav-bubble {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px 7px 12px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid var(--purple-200);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--purple-800);
+    transition: all .18s ease;
+  }
+  .nav-bubble svg { width: 14px; height: 14px; color: var(--purple-700); }
+  .nav-bubble:hover {
+    background: #fff;
+    border-color: var(--purple-400);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(76, 29, 149, 0.18);
   }
 
   /* Inline hero search */
@@ -519,6 +556,169 @@
     .popup-bubble, .popup-backdrop { animation: none; opacity: 1; transform: translate(-50%, -50%); }
   }
 
+  /* ── Field modal: opens when a hero bubble is clicked, stays until closed ── */
+  .field-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 220;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(46, 16, 101, 0.32);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    animation: fieldOverlayIn 320ms ease-out forwards;
+  }
+  .field-overlay.closing { animation: fieldOverlayOut 240ms ease-in forwards; }
+  @keyframes fieldOverlayIn  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fieldOverlayOut { from { opacity: 1; } to { opacity: 0; } }
+
+  .field-modal {
+    width: min(560px, 100%);
+    max-height: 80vh;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1.5px solid rgba(167, 139, 250, 0.55);
+    border-radius: 32px;
+    box-shadow: 0 40px 100px rgba(80, 22, 200, 0.35);
+    padding: 36px;
+    overflow: auto;
+    transform: translateY(40px) scale(0.85);
+    opacity: 0;
+    animation: fieldModalIn 420ms cubic-bezier(.16,.8,.24,1) forwards;
+  }
+  .field-overlay.closing .field-modal { animation: fieldModalOut 240ms ease-in forwards; }
+  @keyframes fieldModalIn {
+    from { opacity: 0; transform: translateY(40px) scale(0.85); }
+    to   { opacity: 1; transform: translateY(0)    scale(1); }
+  }
+  @keyframes fieldModalOut {
+    from { opacity: 1; transform: translateY(0)    scale(1); }
+    to   { opacity: 0; transform: translateY(20px) scale(0.92); }
+  }
+  .field-close {
+    position: absolute;
+    top: 18px; right: 18px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(237, 233, 254, 0.7);
+    color: var(--purple-800);
+    display: grid;
+    place-items: center;
+    transition: all .15s ease;
+  }
+  .field-close:hover { background: var(--purple-200); transform: rotate(90deg); }
+  .field-close svg { width: 16px; height: 16px; }
+  .field-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+  .field-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--purple-500), var(--purple-800));
+    color: white;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(124, 58, 237, 0.35);
+  }
+  .field-icon svg { width: 26px; height: 26px; }
+  .field-name {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 3.5vw, 32px);
+    color: var(--purple-900);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .field-blurb {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 10px 0 18px;
+  }
+  .field-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--purple-700);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+  }
+  .field-meta::before {
+    content: ""; width: 6px; height: 6px;
+    background: var(--purple-500);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+  }
+  .field-companies-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin: 6px 0 10px;
+  }
+  .field-companies {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .field-company {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(245, 243, 255, 0.7);
+    border: 1px solid rgba(196, 181, 253, 0.4);
+    border-radius: 14px;
+    transition: all .15s ease;
+    color: var(--text);
+  }
+  .field-company:hover {
+    background: #fff;
+    border-color: var(--purple-300);
+    transform: translateX(2px);
+  }
+  .field-company .fc-logo {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--purple-100);
+    color: var(--purple-800);
+    display: grid; place-items: center;
+    font-weight: 800;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .fc-body { flex: 1; min-width: 0; }
+  .fc-name { font-weight: 700; font-size: 14px; }
+  .fc-loc  { font-size: 12px; color: var(--text-muted); }
+  .fc-count {
+    font-size: 12px;
+    color: var(--purple-700);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .field-cta {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .field-cta .btn { flex: 1; }
+
+  @media (max-width: 600px) {
+    .field-modal { padding: 24px 22px; border-radius: 24px; max-height: 88vh; }
+    .field-head { flex-direction: column; align-items: flex-start; }
+    .field-cta { flex-direction: column; }
+  }
+
   @media (max-width: 860px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); padding: 28px 22px; }
     .steps { grid-template-columns: 1fr; }
@@ -548,7 +748,10 @@
       <a href="profile.html">Profile</a>
     </div>
     <div class="nav-cta">
-      <a href="signin.html" class="btn btn-ghost">Sign in</a>
+      <a href="signin.html" class="nav-bubble">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Sign in
+      </a>
       <a href="signup.html" class="btn btn-primary">Get started</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Open menu">
@@ -624,7 +827,6 @@
       <p class="hero-sub reveal delay-2">Search thousands of opportunities across every industry. We match you with companies that fit how you want to work.</p>
       <div class="hero-cta reveal delay-3">
         <a href="signup.html" class="btn btn-primary btn-lg">Get started free</a>
-        <a href="jobs.html" class="btn btn-outline btn-lg">Browse jobs →</a>
       </div>
     </div>
   </div>
@@ -852,29 +1054,117 @@
   const DEFAULT_BUBBLE_ICON =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>';
 
+  // ─── Companies hiring per field (modal content) ───
+  const companiesByField = {
+    'Design':            [['Lumen Labs','Remote','12 roles'],['Aria Health','New York, NY','7 roles'],['Solstice Media','Brooklyn, NY','5 roles'],['Northwind Co.','Austin, TX','4 roles']],
+    'Marketing':         [['Northwind Co.','New York, NY','9 roles'],['Verity Finance','Austin, TX','6 roles'],['Meridian Hospital','Chicago, IL','3 roles'],['Solstice Media','Brooklyn, NY','5 roles']],
+    'Engineering':       [['Lumen Labs','Remote','24 roles'],['Aria Health','Remote','14 roles'],['Verity Finance','Austin, TX','11 roles'],['Northwind Co.','New York, NY','9 roles'],['Solstice Media','San Francisco, CA','8 roles']],
+    'Data Science':      [['Solstice Media','San Francisco, CA','8 roles'],['Verity Finance','Austin, TX','5 roles'],['Lumen Labs','Remote','7 roles'],['Meridian Hospital','Chicago, IL','3 roles']],
+    'Research':          [['Aria Health','Remote','4 roles'],['Meridian Hospital','Chicago, IL','5 roles'],['Thornbridge Academy','Boston, MA','3 roles']],
+    'Customer Success':  [['Verity Finance','Austin, TX','5 roles'],['Lumen Labs','Remote','4 roles'],['Northwind Co.','New York, NY','3 roles']],
+    'Hospitality':       [['Cedar & Pine Hotels','Multiple','18 roles'],['Tidewater Resorts','Miami, FL','12 roles'],['Brassroot Café','Brooklyn, NY','6 roles']],
+    'Education':         [['Thornbridge Academy','Boston, MA','9 roles'],['Riverside Charter','Denver, CO','7 roles'],['Cornell Online','Remote','4 roles']],
+    'Healthcare':        [['Aria Health','Remote','22 roles'],['Meridian Hospital','Chicago, IL','18 roles'],['Westcare Clinics','Phoenix, AZ','9 roles']],
+    'Construction':      [['Ironworks Build','Houston, TX','14 roles'],['Cedarpoint Homes','Denver, CO','9 roles'],['Granite & Glass','Seattle, WA','6 roles']],
+    'Trades':            [['Allied Mechanical','Multiple','11 roles'],['Brightline Electric','Atlanta, GA','7 roles'],['Sound Plumbing Co.','Portland, OR','5 roles']],
+    'Nonprofit':         [['Hopebridge Foundation','Remote','5 roles'],['Northstar Aid','Washington, DC','4 roles'],['Greenfield Trust','Chicago, IL','3 roles']],
+    'Writing':           [['Solstice Media','Remote','5 roles'],['Lumen Labs','Remote','3 roles'],['Northwind Co.','New York, NY','2 roles']],
+    'Finance':           [['Verity Finance','Austin, TX','12 roles'],['Atlas Capital','New York, NY','9 roles'],['Northwind Co.','New York, NY','5 roles']],
+    'Sales':             [['Lumen Labs','Remote','10 roles'],['Verity Finance','Austin, TX','7 roles'],['Northwind Co.','New York, NY','6 roles'],['Solstice Media','Brooklyn, NY','4 roles']],
+    'Operations':        [['Northwind Co.','New York, NY','6 roles'],['Verity Finance','Austin, TX','5 roles'],['Aria Health','Remote','4 roles']],
+    'Legal':             [['Verity Finance','Austin, TX','3 roles'],['Atlas Capital','New York, NY','2 roles'],['Meridian Hospital','Chicago, IL','2 roles']],
+    'Product':           [['Lumen Labs','Remote','8 roles'],['Aria Health','Remote','5 roles'],['Solstice Media','San Francisco, CA','4 roles']],
+    'Remote':            [['Lumen Labs','Worldwide','24 roles'],['Aria Health','US','18 roles'],['Solstice Media','Remote','9 roles'],['Cornell Online','Remote','7 roles']],
+    'HR':                [['Northwind Co.','New York, NY','3 roles'],['Aria Health','Remote','2 roles'],['Verity Finance','Austin, TX','2 roles']],
+    'Manufacturing':     [['Ironworks Build','Houston, TX','8 roles'],['Granite & Glass','Seattle, WA','5 roles'],['Allied Mechanical','Multiple','4 roles']],
+    'Media':             [['Solstice Media','Brooklyn, NY','12 roles'],['Northwind Co.','New York, NY','4 roles']],
+    'Logistics':         [['Tidewater Resorts','Miami, FL','5 roles'],['Cedarpoint Homes','Denver, CO','4 roles'],['Brightline Electric','Atlanta, GA','3 roles']],
+    'Government':        [['City of Boston','Boston, MA','9 roles'],['State of Colorado','Denver, CO','5 roles']],
+    'Real Estate':       [['Cedarpoint Homes','Denver, CO','7 roles'],['Westcare Clinics','Phoenix, AZ','3 roles']]
+  };
+
+  // ─── Open the field modal — quick to appear, stays until closed ───
+  function openFieldModal({ name, blurb, count, iconHTML, href, companies }) {
+    // Close any existing one first
+    document.querySelectorAll('.field-overlay').forEach(o => o.remove());
+
+    const overlay = document.createElement('div');
+    overlay.className = 'field-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', name);
+
+    const companyRows = (companies || []).map(([cName, cLoc, cCount]) => {
+      const initial = cName.charAt(0);
+      return '<a href="jobs.html?company=' + encodeURIComponent(cName) + '" class="field-company">' +
+             '  <div class="fc-logo">' + initial + '</div>' +
+             '  <div class="fc-body"><div class="fc-name">' + cName + '</div><div class="fc-loc">' + cLoc + '</div></div>' +
+             '  <div class="fc-count">' + cCount + '</div>' +
+             '</a>';
+    }).join('');
+
+    overlay.innerHTML =
+      '<div class="field-modal">' +
+      '  <button class="field-close" aria-label="Close">' +
+      '    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+      '  </button>' +
+      '  <div class="field-head">' +
+      '    <div class="field-icon">' + iconHTML + '</div>' +
+      '    <div><div class="field-name">' + name + '</div></div>' +
+      '  </div>' +
+      '  <p class="field-blurb">' + blurb + '</p>' +
+      (count ? '  <div class="field-meta">' + count + '</div>' : '') +
+      '  <div class="field-companies-label">Companies hiring now</div>' +
+      '  <div class="field-companies">' + (companyRows || '<div class="field-blurb">Companies are added daily.</div>') + '</div>' +
+      '  <div class="field-cta">' +
+      '    <a href="' + (href || '#') + '" class="btn btn-primary">See all jobs</a>' +
+      '    <button type="button" class="btn btn-outline" data-close>Close</button>' +
+      '  </div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    function close() {
+      overlay.classList.add('closing');
+      document.body.style.overflow = '';
+      setTimeout(() => overlay.remove(), 240);
+    }
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    overlay.querySelector('.field-close').addEventListener('click', close);
+    overlay.querySelector('[data-close]').addEventListener('click', close);
+    document.addEventListener('keydown', function onKey(e) {
+      if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onKey); }
+    });
+  }
+
+  // ─── Floating hero bubbles click → modal (stays) ───
   document.querySelectorAll('.job-bubble').forEach((bubble) => {
     bubble.addEventListener('click', (e) => {
       e.preventDefault();
-      // Search bubble → take user straight to the jobs page search
+
+      // Search bubble → take user straight to the full jobs page
       if (bubble.dataset.search === 'true') {
-        spawnPopup({
-          name:     'Search jobs',
-          blurb:    'Browse the full library — every role, every field, every location.',
+        openFieldModal({
+          name:     'Search every role',
+          blurb:    'Use full-text search, filters by location, type, salary, and remote-only — across 120K+ active listings.',
           count:    '120,438 open roles',
           iconHTML: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-          href:     'jobs.html'
+          href:     'jobs.html',
+          companies: [['Lumen Labs','Worldwide','24 roles'],['Aria Health','US','18 roles'],['Solstice Media','Brooklyn, NY','9 roles'],['Verity Finance','Austin, TX','12 roles']]
         });
         return;
       }
 
       const name = bubble.textContent.trim();
       const info = categoryInfo[name] || {};
-      spawnPopup({
+      openFieldModal({
         name,
-        blurb:    info.blurb || 'Find your next role in this field.',
-        count:    info.count || '',
-        iconHTML: DEFAULT_BUBBLE_ICON,
-        href:     info.href || ('jobs.html?q=' + encodeURIComponent(name))
+        blurb:     info.blurb || 'Find your next role in this field.',
+        count:     info.count || '',
+        iconHTML:  DEFAULT_BUBBLE_ICON,
+        href:      info.href || ('jobs.html?q=' + encodeURIComponent(name)),
+        companies: companiesByField[name] || []
       });
     });
   });
