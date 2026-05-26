@@ -359,6 +359,58 @@
   .cta-actions .btn-outline { border-color: rgba(255,255,255,.4); color: white; background: transparent; }
   .cta-actions .btn-outline:hover { background: rgba(255,255,255,.1); border-color: white; color: white; }
 
+  /* Big slow bubble that spawns when a category card is clicked */
+  .popup-bubble {
+    position: fixed;
+    left: 6vw;
+    bottom: 8vh;
+    z-index: 200;
+    padding: 22px 32px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1.5px solid rgba(167, 139, 250, 0.55);
+    border-radius: 999px;
+    box-shadow: 0 24px 64px rgba(80, 22, 200, 0.28);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-display);
+    font-size: clamp(20px, 3vw, 32px);
+    color: var(--purple-800);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(40px) scale(0.85);
+    animation: popupBubble 1500ms cubic-bezier(.2,.8,.3,1) forwards;
+  }
+  .popup-bubble .pb-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple-500), var(--purple-800));
+    box-shadow: 0 0 24px rgba(139, 92, 246, 0.55);
+    flex-shrink: 0;
+  }
+  .popup-bubble .pb-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--purple-100);
+    color: var(--purple-700);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .popup-bubble .pb-icon svg { width: 18px; height: 18px; }
+  @keyframes popupBubble {
+    0%   { opacity: 0; transform: translateY(40px) scale(0.85); }
+    20%  { opacity: 1; transform: translateY(-10px) scale(1.04); }
+    35%  { opacity: 1; transform: translateY(-20px) scale(1.0); }
+    80%  { opacity: 1; transform: translateY(-50px) scale(1.0); }
+    100% { opacity: 0; transform: translateY(-90px) scale(0.92); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .popup-bubble { animation: none; opacity: 1; transform: none; }
+  }
+
   @media (max-width: 860px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); padding: 28px 22px; }
     .steps { grid-template-columns: 1fr; }
@@ -368,6 +420,13 @@
     .hero > .container { padding: 48px 22px 60px; }
     .hero-search { flex-direction: column; padding: 12px; border-radius: var(--radius-lg); }
     .hero-search button { width: 100%; padding: 12px; border-radius: var(--radius-md); }
+    .popup-bubble { left: 50%; transform: translateX(-50%) translateY(40px) scale(0.85); }
+    @keyframes popupBubble {
+      0%   { opacity: 0; transform: translateX(-50%) translateY(40px) scale(0.85); }
+      20%  { opacity: 1; transform: translateX(-50%) translateY(-10px) scale(1.04); }
+      80%  { opacity: 1; transform: translateX(-50%) translateY(-50px) scale(1.0); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-90px) scale(0.92); }
+    }
   }
 </style>
 </head>
@@ -596,5 +655,44 @@
 </footer>
 
 <script src="nav.js"></script>
+<script>
+  // Category bubble pop: when you click a category, spawn a big slow
+  // bubble on the bottom-left, then navigate after it crests.
+  document.querySelectorAll('.cat-card').forEach((card) => {
+    card.addEventListener('click', (e) => {
+      // Don't intercept middle-click / cmd-click — let those open in new tab.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+      e.preventDefault();
+
+      const href = card.getAttribute('href');
+      const name = card.querySelector('.cat-name')?.textContent?.trim() || 'Browse';
+      const iconHTML = card.querySelector('.cat-icon')?.innerHTML || '';
+
+      // Build the bubble
+      const bubble = document.createElement('div');
+      bubble.className = 'popup-bubble';
+      bubble.setAttribute('role', 'status');
+      bubble.setAttribute('aria-live', 'polite');
+      bubble.innerHTML =
+        '<span class="pb-icon">' + iconHTML + '</span>' +
+        '<span>' + name + '</span>' +
+        '<span class="pb-dot"></span>';
+      document.body.appendChild(bubble);
+
+      // Navigate after the bubble has had its moment on screen
+      setTimeout(() => { window.location.href = href; }, 900);
+      // Clean up the DOM if the user stays
+      setTimeout(() => { bubble.remove(); }, 1700);
+    });
+
+    // Keyboard accessibility: Enter / Space triggers the same effect
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  });
+</script>
 </body>
 </html>
