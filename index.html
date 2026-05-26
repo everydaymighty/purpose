@@ -12,9 +12,9 @@
   /* ── HERO ── */
   .hero {
     position: relative;
-    min-height: 86vh;
+    min-height: 82vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     overflow: hidden;
     background:
       radial-gradient(ellipse 80% 60% at 50% -10%, var(--purple-300) 0%, transparent 55%),
@@ -22,7 +22,7 @@
       radial-gradient(ellipse 70% 60% at 100% 60%,  var(--purple-100) 0%, transparent 55%),
       linear-gradient(165deg, #e8e3ff 0%, #f0ecff 35%, #f8f6ff 65%, #eeeaff 100%);
   }
-  .hero > .container { width: 100%; padding: 80px 24px 140px; }
+  .hero > .container { width: 100%; padding: 64px 24px 160px; }
 
   /* Soft blend at the bottom edge of the hero so it melts into the
      body's lavender gradient instead of cutting off hard. */
@@ -216,6 +216,14 @@
     max-width: 520px;
     margin: 0 auto 28px;
     line-height: 1.75;
+  }
+
+  /* Hero CTA row (replaces the inline search) */
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   /* Inline hero search */
@@ -614,18 +622,9 @@
       <span class="badge reveal"><span class="badge-dot"></span> 12,400+ new jobs this week</span>
       <h1 class="hero-title reveal delay-1">Find work <span class="accent">you love.</span><br>Land it faster.</h1>
       <p class="hero-sub reveal delay-2">Search thousands of opportunities across every industry. We match you with companies that fit how you want to work.</p>
-
-      <form class="hero-search reveal delay-3" onsubmit="event.preventDefault(); const q = this.querySelector('input').value.trim(); window.location.href = 'jobs.html' + (q ? ('?q=' + encodeURIComponent(q)) : '');">
-        <input type="text" placeholder="Job title, keyword, or company…" />
-        <button type="submit">Search</button>
-      </form>
-
-      <div class="hero-pop reveal delay-4">
-        <span>Popular:</span>
-        <a href="jobs.html?cat=engineering">Engineering</a>
-        <a href="jobs.html?cat=design">Design</a>
-        <a href="jobs.html?arrangement=remote">Remote</a>
-        <a href="jobs.html?cat=healthcare">Healthcare</a>
+      <div class="hero-cta reveal delay-3">
+        <a href="signup.html" class="btn btn-primary btn-lg">Get started free</a>
+        <a href="jobs.html" class="btn btn-outline btn-lg">Browse jobs →</a>
       </div>
     </div>
   </div>
@@ -856,17 +855,15 @@
   document.querySelectorAll('.job-bubble').forEach((bubble) => {
     bubble.addEventListener('click', (e) => {
       e.preventDefault();
-      // Search bubble — focus the hero search field instead of popping
+      // Search bubble → take user straight to the jobs page search
       if (bubble.dataset.search === 'true') {
-        const input = document.querySelector('.hero-search input');
-        if (input) {
-          input.focus({ preventScroll: true });
-          input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          // brief glow to draw attention
-          input.style.transition = 'box-shadow .3s ease';
-          input.style.boxShadow = '0 0 0 4px rgba(167, 139, 250, 0.35)';
-          setTimeout(() => { input.style.boxShadow = ''; }, 1200);
-        }
+        spawnPopup({
+          name:     'Search jobs',
+          blurb:    'Browse the full library — every role, every field, every location.',
+          count:    '120,438 open roles',
+          iconHTML: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+          href:     'jobs.html'
+        });
         return;
       }
 
