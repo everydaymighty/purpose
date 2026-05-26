@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blog — Pathway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+      </span>
+      Pathway
+    </a>
+    <div class="nav-links">
+      <a href="jobs.html">Browse jobs</a>
+      <a href="index.html#how">How it works</a>
+      <a href="employers.html">For employers</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn btn-ghost">Sign in</a>
+      <a href="signup.html" class="btn btn-primary">Get started</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="jobs.html">Browse jobs</a>
+  <a href="index.html#how">How it works</a>
+  <a href="employers.html">For employers</a>
+  <a href="profile.html">Profile</a>
+  <div class="divider-line"></div>
+  <a href="signin.html" class="btn btn-ghost">Sign in</a>
+  <a href="signup.html" class="btn btn-primary">Get started</a>
+</div>
+
+<div class="coming-shell">
+  <div class="coming-card">
+    <div class="coming-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    </div>
+    <div class="coming-eyebrow">Coming soon</div>
+    <h1>The Pathway Blog</h1>
+    <p>Stories about work, hiring, and what we're learning while building Pathway. Subscribe and we'll send new posts straight to your inbox — no more than once a week.</p>
+    <form class="coming-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='You’re subscribed ✓'; this.querySelector('button').disabled=true;">
+      <input type="email" placeholder="you@example.com" required>
+      <button type="submit" class="btn btn-primary">Subscribe</button>
+    </form>
+    <a href="index.html" class="coming-back">← Back to home</a>
+  </div>
+</div>
+
+<script>
+  const t=document.getElementById('navToggle'),m=document.getElementById('mobileNav');
+  if(t&&m){t.addEventListener('click',()=>{t.classList.toggle('open');m.classList.toggle('open');t.setAttribute('aria-expanded',t.classList.contains('open'));});}
+</script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact Sales — Pathway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .contact-shell {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    padding: 56px 0 80px;
+    align-items: start;
+  }
+  .contact-intro h1 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 14px 0 14px;
+  }
+  .contact-intro p {
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 22px;
+  }
+  .contact-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 24px;
+  }
+  .contact-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .contact-points .ck {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--purple-100);
+    color: var(--purple-700);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .contact-points .ck svg { width: 12px; height: 12px; }
+
+  .contact-form {
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-xl);
+    padding: 36px;
+    box-shadow: 0 20px 50px rgba(76, 29, 149, 0.15);
+  }
+  .contact-form h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .contact-success {
+    display: none;
+    text-align: center;
+    padding: 24px 0;
+  }
+  .contact-success.show { display: block; }
+  .contact-success.show + form { display: none; }
+  .success-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--purple-100);
+    color: var(--purple-700);
+    display: grid;
+    place-items: center;
+    margin: 0 auto 16px;
+  }
+  .success-icon svg { width: 26px; height: 26px; }
+  .contact-success h3 { font-size: 19px; font-weight: 700; margin-bottom: 6px; }
+  .contact-success p { color: var(--text-muted); font-size: 14px; }
+
+  @media (max-width: 860px) {
+    .contact-shell { grid-template-columns: 1fr; gap: 32px; padding: 32px 0 64px; }
+    .contact-form { padding: 26px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+      </span>
+      Pathway
+    </a>
+    <div class="nav-links">
+      <a href="jobs.html">Browse jobs</a>
+      <a href="index.html#how">How it works</a>
+      <a href="employers.html" class="active">For employers</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn btn-ghost">Sign in</a>
+      <a href="signup.html" class="btn btn-primary">Get started</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="jobs.html">Browse jobs</a>
+  <a href="index.html#how">How it works</a>
+  <a href="employers.html">For employers</a>
+  <a href="profile.html">Profile</a>
+  <div class="divider-line"></div>
+  <a href="signin.html" class="btn btn-ghost">Sign in</a>
+  <a href="signup.html" class="btn btn-primary">Get started</a>
+</div>
+
+<div class="container">
+  <div class="contact-shell">
+    <div class="contact-intro">
+      <span class="badge"><span class="badge-dot"></span> Enterprise sales</span>
+      <h1>Hire faster with a team behind you.</h1>
+      <p>Talk to our sales team about Enterprise pricing, custom integrations, dedicated onboarding, and security reviews. We typically respond within one business day.</p>
+      <ul class="contact-points">
+        <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Volume pricing for 25+ job postings per year</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> SSO, SAML, and audit logs</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> ATS integrations (Greenhouse, Lever, Workday)</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Dedicated account manager &amp; onboarding</li>
+      </ul>
+    </div>
+
+    <div class="contact-form">
+      <h2>Tell us about your team</h2>
+
+      <div class="contact-success" id="successState">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3>Thanks — we'll be in touch.</h3>
+        <p>A member of our team will reach out within one business day.</p>
+      </div>
+
+      <form id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="firstName">First name</label>
+            <input class="input" type="text" id="firstName" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lastName">Last name</label>
+            <input class="input" type="text" id="lastName" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="workEmail">Work email</label>
+          <input class="input" type="email" id="workEmail" placeholder="you@yourcompany.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="company">Company</label>
+          <input class="input" type="text" id="company" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="size">Team size</label>
+            <select class="select" id="size" required>
+              <option value="">Select…</option>
+              <option>1–10</option>
+              <option>11–50</option>
+              <option>51–200</option>
+              <option>201–1,000</option>
+              <option>1,000+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hires">Hires per year</label>
+            <select class="select" id="hires" required>
+              <option value="">Select…</option>
+              <option>1–10</option>
+              <option>11–50</option>
+              <option>51–200</option>
+              <option>200+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">How can we help?</label>
+          <textarea class="textarea" id="message" rows="4" placeholder="A quick note about what you're looking for…"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full btn-lg">Send message</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+          </span>
+          Pathway
+        </a>
+        <p>Helping people find work they love — and helping companies find the people they need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>For job seekers</h4>
+        <ul>
+          <li><a href="jobs.html">Browse jobs</a></li>
+          <li><a href="profile.html">Your profile</a></li>
+          <li><a href="career-advice.html">Career advice</a></li>
+          <li><a href="salary-guide.html">Salary guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>For employers</h4>
+        <ul>
+          <li><a href="employers.html">Post a job</a></li>
+          <li><a href="employers.html#pricing">Pricing</a></li>
+          <li><a href="hiring-resources.html">Hiring resources</a></li>
+          <li><a href="contact.html">Contact sales</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="careers.html">Careers</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Pathway. All rights reserved.</div>
+      <div>Made with care.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const t=document.getElementById('navToggle'),m=document.getElementById('mobileNav');
+  if(t&&m){t.addEventListener('click',()=>{t.classList.toggle('open');m.classList.toggle('open');t.setAttribute('aria-expanded',t.classList.contains('open'));});}
+
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('successState').classList.add('show');
+    window.scrollTo({top: this.offsetTop - 100, behavior: 'smooth'});
+  });
+</script>
+</body>
+</html>
