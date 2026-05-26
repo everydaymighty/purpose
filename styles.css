@@ -3,6 +3,8 @@
    Design tokens + reusable components used across every page.
    =================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Serif+Display:ital@0;1&display=swap');
+
 :root {
   --purple-900: #2E1065;
   --purple-800: #4C1D95;
@@ -35,13 +37,16 @@
   --radius-md: 12px;
   --radius-lg: 18px;
   --radius-xl: 28px;
+
+  --font-body:    'DM Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  --font-display: 'DM Serif Display', Georgia, serif;
 }
 
 /* ---------- RESET ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-body);
   color: var(--text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -716,6 +721,103 @@ section.block { padding: 64px 0; }
    body gradient still flows through. */
 .how {
   background: transparent !important;
+}
+
+/* ---------- DISPLAY FONT (selective) ----------
+   The body uses DM Sans; we opt specific headings into DM Serif Display
+   for a softer, more editorial feel. Other headings stay in DM Sans. */
+.section-title,
+.page-title,
+.auth-title,
+h1.hero-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- NAV DRAWER (mobile) ----------
+   Slides in from the right on mobile, with backdrop. */
+.nav-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  pointer-events: none;
+}
+.nav-drawer.open { display: block; pointer-events: auto; }
+.nav-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(46, 16, 101, 0.35);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.nav-drawer.open .nav-drawer-backdrop { opacity: 1; }
+.nav-drawer-panel {
+  position: absolute;
+  top: 0; right: 0;
+  height: 100%;
+  width: min(86vw, 320px);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-left: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: -20px 0 50px rgba(76, 29, 149, 0.18);
+  padding: 64px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transform: translateX(100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+.nav-drawer.open .nav-drawer-panel { transform: translateX(0); }
+.nav-drawer-close {
+  position: absolute;
+  top: 18px; right: 18px;
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+  transition: background .15s ease;
+}
+.nav-drawer-close:hover { background: var(--purple-100); }
+.nav-drawer a {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  transition: all .15s ease;
+}
+.nav-drawer a:hover { background: var(--purple-50); color: var(--purple-800); }
+.nav-drawer-divider {
+  height: 1px;
+  background: var(--border-solid);
+  margin: 10px 0;
+}
+
+/* ---------- SCROLL REVEAL ----------
+   Add `.reveal` to any element; the intersection observer in nav.js
+   adds `.in-view` when it scrolls into the viewport. */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1);
+}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+.reveal.delay-1 { transition-delay: .08s; }
+.reveal.delay-2 { transition-delay: .16s; }
+.reveal.delay-3 { transition-delay: .24s; }
+.reveal.delay-4 { transition-delay: .32s; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- COUNT-UP NUMBER ---------- */
+.counter {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
 }
 
 /* ---------- COMING SOON PAGE ---------- */

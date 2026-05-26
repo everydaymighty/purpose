@@ -6,270 +6,368 @@
 <title>Pathway — Find work you love</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
-  /* Page-specific styles for the landing page */
+  /* ── HERO ── */
   .hero {
     position: relative;
-    padding: 80px 0 100px;
+    min-height: 86vh;
+    display: flex;
+    align-items: center;
     overflow: hidden;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, var(--purple-300) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 0% 80%,   var(--purple-200) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 60% at 100% 60%,  var(--purple-100) 0%, transparent 55%),
+      linear-gradient(165deg, #e8e3ff 0%, #f0ecff 35%, #f8f6ff 65%, #eeeaff 100%);
   }
-  .hero::before {
-    content: "";
+  .hero > .container { width: 100%; padding: 80px 24px; }
+
+  @keyframes floatA {
+    0%   { transform: translateY(-50%) translateX(0px); }
+    30%  { transform: translateY(-47%) translateX(16px); }
+    65%  { transform: translateY(-54%) translateX(-10px); }
+    100% { transform: translateY(-50%) translateX(0px); }
+  }
+  @keyframes floatB {
+    0%   { transform: translateY(0px) translateX(0px); }
+    35%  { transform: translateY(-20px) translateX(-12px); }
+    70%  { transform: translateY(14px) translateX(8px); }
+    100% { transform: translateY(0px) translateX(0px); }
+  }
+  @keyframes bubbleFloat {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .hero-circle-1 {
     position: absolute;
-    top: -200px; right: -200px;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, var(--purple-200) 0%, transparent 60%);
-    opacity: 0.6;
-    z-index: 0;
-  }
-  .hero::after {
-    content: "";
-    position: absolute;
-    bottom: -100px; left: -150px;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, var(--purple-100) 0%, transparent 60%);
-    z-index: 0;
-  }
-  .hero-inner {
-    position: relative;
+    left: -8%; top: 50%;
+    transform: translateY(-50%);
+    width: clamp(460px, 48vw, 720px);
+    height: clamp(460px, 48vw, 720px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%,
+      rgba(196,181,253,0.65) 0%,
+      rgba(167,139,250,0.32) 38%,
+      rgba(109,40,217,0.1)  68%,
+      transparent 100%);
+    box-shadow:
+      inset 0 0 100px rgba(139,92,246,0.22),
+      inset 0 0 260px rgba(109,40,217,0.1),
+      0 0 160px rgba(139,92,246,0.16);
+    border: 1.5px solid rgba(167,139,250,0.4);
     z-index: 1;
+    animation: floatA 18s ease-in-out infinite;
+  }
+  .hero-circle-2 {
+    position: absolute;
+    right: -8%; top: 50%;
+    transform: translateY(-50%);
+    width: clamp(400px, 44vw, 660px);
+    height: clamp(400px, 44vw, 660px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 58% 38%,
+      rgba(221,214,254,0.75) 0%,
+      rgba(196,181,253,0.5)  30%,
+      rgba(139,92,246,0.16)  65%,
+      transparent 100%);
+    box-shadow:
+      inset 0 0 80px rgba(109,40,217,0.14),
+      inset 0 0 200px rgba(139,92,246,0.09),
+      0 0 120px rgba(196,181,253,0.24);
+    border: 1.5px solid rgba(196,181,253,0.44);
+    z-index: 1;
+    animation: floatB 22s ease-in-out infinite;
+  }
+
+  .job-bubble {
+    position: absolute;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(196,181,253,0.6);
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--purple-800);
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(80,22,200,0.12);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .bubble-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--purple-500); flex-shrink: 0;
+  }
+
+  .hero-bubbles-left {
+    position: absolute;
+    left: -8%; top: 50%;
+    transform: translateY(-50%);
+    width: clamp(460px, 48vw, 720px);
+    height: clamp(460px, 48vw, 720px);
+    z-index: 2;
+    pointer-events: none;
+    animation: floatA 18s ease-in-out infinite;
+  }
+  .hero-bubbles-left .job-bubble:nth-child(1) { top: 12%; left: 32%; animation: bubbleFloat 14s ease-in-out infinite 0s; }
+  .hero-bubbles-left .job-bubble:nth-child(2) { top: 24%; left: 14%; animation: bubbleFloat 16s ease-in-out infinite 2s; }
+  .hero-bubbles-left .job-bubble:nth-child(3) { top: 38%; left: 28%; animation: bubbleFloat 13s ease-in-out infinite 1s; }
+  .hero-bubbles-left .job-bubble:nth-child(4) { top: 52%; left: 12%; animation: bubbleFloat 17s ease-in-out infinite 3s; }
+  .hero-bubbles-left .job-bubble:nth-child(5) { top: 65%; left: 26%; animation: bubbleFloat 15s ease-in-out infinite 0.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(6) { top: 78%; left: 34%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(7) { top: 8%; left: 18%; animation: bubbleFloat 19s ease-in-out infinite 2.5s; }
+
+  .hero-bubbles-right {
+    position: absolute;
+    right: -8%; top: 50%;
+    transform: translateY(-50%);
+    width: clamp(400px, 44vw, 660px);
+    height: clamp(400px, 44vw, 660px);
+    z-index: 2;
+    pointer-events: none;
+    animation: floatB 22s ease-in-out infinite;
+  }
+  .hero-bubbles-right .job-bubble:nth-child(1) { top: 15%; right: 22%; animation: bubbleFloat 16s ease-in-out infinite 1s; }
+  .hero-bubbles-right .job-bubble:nth-child(2) { top: 30%; right: 10%; animation: bubbleFloat 14s ease-in-out infinite 3s; }
+  .hero-bubbles-right .job-bubble:nth-child(3) { top: 45%; right: 24%; animation: bubbleFloat 17s ease-in-out infinite 0s; }
+  .hero-bubbles-right .job-bubble:nth-child(4) { top: 59%; right: 12%; animation: bubbleFloat 13s ease-in-out infinite 2s; }
+  .hero-bubbles-right .job-bubble:nth-child(5) { top: 72%; right: 26%; animation: bubbleFloat 15s ease-in-out infinite 4s; }
+  .hero-bubbles-right .job-bubble:nth-child(6) { top: 84%; right: 18%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
+
+  .hero-inner {
+    position: relative; z-index: 3;
     text-align: center;
-    max-width: 820px;
+    max-width: 740px;
     margin: 0 auto;
   }
+
   h1.hero-title {
-    font-size: clamp(36px, 6vw, 64px);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    margin: 24px 0 20px;
+    font-size: clamp(42px, 6.5vw, 72px);
+    line-height: 1.03;
+    color: var(--purple-900);
+    margin: 20px 0 18px;
   }
-  .hero-title .accent {
-    background: linear-gradient(135deg, var(--purple-600), var(--purple-800));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
+  .hero-title .accent { color: var(--purple-600); font-style: italic; }
+
   .hero-sub {
-    font-size: 18px;
+    font-size: 17px;
     color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto 28px;
+    line-height: 1.75;
+  }
+
+  /* Inline hero search */
+  .hero-search {
+    display: flex;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    padding: 6px;
     max-width: 580px;
-    margin: 0 auto 40px;
+    margin: 0 auto 18px;
+    box-shadow: 0 16px 40px rgba(76, 29, 149, 0.15);
   }
-  .search {
-    display: flex;
-    align-items: center;
-    background: var(--surface);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-    padding: 8px;
-    max-width: 720px;
-    margin: 0 auto;
-    border: 1px solid var(--border);
-  }
-  .search-field {
+  .hero-search input {
     flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    min-width: 0;
-  }
-  .search-field + .search-field { border-left: 1px solid var(--border); }
-  .search-field svg {
-    width: 18px; height: 18px;
-    color: var(--purple-600);
-    flex-shrink: 0;
-  }
-  .search-field input {
-    width: 100%;
     border: none;
     outline: none;
-    font-family: inherit;
+    padding: 14px 22px;
+    font: inherit;
     font-size: 15px;
-    color: var(--text);
     background: transparent;
+    color: var(--text);
+    min-width: 0;
   }
-  .search-field input::placeholder { color: var(--text-muted); }
-  .search-btn {
-    padding: 14px 28px;
+  .hero-search input::placeholder { color: var(--text-muted); }
+  .hero-search button {
+    padding: 12px 26px;
+    border-radius: 999px;
     background: var(--purple-700);
     color: white;
     font-weight: 600;
-    border-radius: 20px;
-    transition: all .15s ease;
+    font-size: 15px;
+    transition: background .15s ease;
   }
-  .search-btn:hover { background: var(--purple-800); }
-  .popular {
-    display: flex;
-    align-items: center;
+  .hero-search button:hover { background: var(--purple-800); }
+
+  .hero-pop {
+    display: inline-flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
-    margin-top: 24px;
-    font-size: 14px;
+    gap: 6px;
+    font-size: 13px;
     color: var(--text-muted);
+    align-items: center;
   }
-  .popular > span { margin-right: 4px; }
-  .stats {
+  .hero-pop a {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(196,181,253,0.45);
+    color: var(--purple-800);
+    font-weight: 600;
+    transition: all .15s ease;
+  }
+  .hero-pop a:hover { background: white; border-color: var(--purple-400); }
+
+  /* Stats strip */
+  .stats-strip {
+    padding: 56px 0 24px;
+  }
+  .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    margin-top: 80px;
-    padding: 32px;
-    background: linear-gradient(135deg, var(--purple-800), var(--purple-600));
-    border-radius: var(--radius-lg);
+    gap: 16px;
+    padding: 36px 32px;
+    background: linear-gradient(135deg, var(--purple-900), var(--purple-600));
+    border-radius: var(--radius-xl);
     color: white;
+    position: relative;
+    overflow: hidden;
   }
+  .stats-grid::before {
+    content: "";
+    position: absolute;
+    top: -40%; right: -8%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--purple-400) 0%, transparent 60%);
+    opacity: 0.3;
+  }
+  .stat { position: relative; }
   .stat-num {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
   .stat-label {
-    font-size: 14px;
     color: var(--purple-200);
+    font-size: 13px;
     margin-top: 4px;
   }
+
+  /* Categories */
   .categories {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
+    gap: 18px;
   }
   .cat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    transition: all .2s ease;
-    cursor: pointer;
-    color: inherit;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 28px;
+    transition: all .2s ease; cursor: pointer; color: inherit;
   }
-  .cat-card:hover {
-    border-color: var(--purple-300);
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-  }
+  .cat-card:hover { border-color: var(--purple-300); transform: translateY(-4px); box-shadow: var(--shadow-md); }
   .cat-icon {
-    width: 48px; height: 48px;
-    border-radius: 12px;
-    background: var(--purple-100);
-    color: var(--purple-700);
-    display: grid;
-    place-items: center;
-    margin-bottom: 18px;
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--purple-100); color: var(--purple-700);
+    display: grid; place-items: center; margin-bottom: 18px;
   }
   .cat-icon svg { width: 22px; height: 22px; }
   .cat-name { font-weight: 700; font-size: 17px; margin-bottom: 4px; }
   .cat-count { color: var(--text-muted); font-size: 14px; }
 
-  .how { background: var(--purple-50); }
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-  }
+  /* How it works */
+  .how { background: rgba(245,243,255,0.5); }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
   .step {
-    background: var(--surface);
-    padding: 36px 28px;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
+    background: var(--surface); padding: 36px 28px;
+    border-radius: var(--radius-lg); border: 1px solid var(--border);
     position: relative;
   }
   .step-num {
-    position: absolute;
-    top: 28px; right: 28px;
-    font-weight: 800;
-    font-size: 48px;
-    color: var(--purple-100);
-    line-height: 1;
+    position: absolute; top: 28px; right: 28px;
+    font-family: var(--font-display); font-size: 52px;
+    color: var(--purple-100); line-height: 1;
   }
   .step-icon {
-    width: 56px; height: 56px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--purple-600), var(--purple-800));
-    color: white;
-    display: grid;
-    place-items: center;
-    margin-bottom: 20px;
+    width: 56px; height: 56px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--purple-600), var(--purple-900));
+    color: white; display: grid; place-items: center; margin-bottom: 20px;
   }
   .step-icon svg { width: 24px; height: 24px; }
   .step h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; }
-  .step p { color: var(--text-muted); font-size: 15px; }
+  .step p { color: var(--text-muted); font-size: 15px; line-height: 1.65; }
 
-  .jobs-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+  /* Featured jobs */
+  .jobs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+
+  /* Trusted-by marquee */
+  .trusted {
+    padding: 32px 0 0;
+    text-align: center;
+  }
+  .trusted-label {
+    color: var(--text-muted);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 18px;
+  }
+  .marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 56px;
+    width: max-content;
+    animation: marquee 30s linear infinite;
+  }
+  .marquee-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--purple-800);
+    opacity: 0.55;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
   }
 
+  /* CTA */
   .cta-section { padding: 80px 0; }
   .cta-card {
-    background: linear-gradient(135deg, var(--purple-800), var(--purple-600));
-    border-radius: var(--radius-xl);
-    padding: 64px 40px;
-    text-align: center;
-    color: white;
-    position: relative;
-    overflow: hidden;
+    background: linear-gradient(135deg, var(--purple-900), var(--purple-600));
+    border-radius: var(--radius-xl); padding: 64px 40px;
+    text-align: center; color: white; position: relative; overflow: hidden;
   }
   .cta-card::before {
-    content: "";
-    position: absolute;
-    top: -50%; right: -10%;
+    content: ""; position: absolute; top: -50%; right: -10%;
     width: 400px; height: 400px;
     background: radial-gradient(circle, var(--purple-400) 0%, transparent 60%);
-    opacity: 0.35;
+    opacity: .3; z-index: 0;
   }
-  .cta-card h2 {
-    font-size: clamp(28px, 4vw, 40px);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 14px;
-    position: relative;
-  }
-  .cta-card p {
-    color: var(--purple-200);
-    font-size: 17px;
-    max-width: 520px;
-    margin: 0 auto 28px;
-    position: relative;
-  }
-  .cta-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    position: relative;
-    flex-wrap: wrap;
-  }
-  .cta-card .btn-primary { background: white; color: var(--purple-800); }
-  .cta-card .btn-primary:hover { background: var(--purple-50); }
-  .cta-card .btn-outline {
-    background: transparent;
-    color: white;
-    border-color: rgba(255,255,255,0.3);
-  }
-  .cta-card .btn-outline:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.5);
-  }
+  .cta-card h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4vw, 42px); position: relative; z-index: 1; margin-bottom: 12px; }
+  .cta-card p { font-size: 17px; opacity: .85; position: relative; z-index: 1; margin-bottom: 32px; max-width: 520px; margin-left: auto; margin-right: auto; }
+  .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+  .cta-actions .btn-primary { background: white; color: var(--purple-800); border-color: white; }
+  .cta-actions .btn-primary:hover { background: var(--purple-50); color: var(--purple-900); }
+  .cta-actions .btn-outline { border-color: rgba(255,255,255,.4); color: white; background: transparent; }
+  .cta-actions .btn-outline:hover { background: rgba(255,255,255,.1); border-color: white; color: white; }
 
   @media (max-width: 860px) {
-    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); padding: 28px 22px; }
     .steps { grid-template-columns: 1fr; }
     .jobs-grid { grid-template-columns: 1fr; }
-    .search { flex-direction: column; padding: 16px; gap: 8px; border-radius: var(--radius-lg); }
-    .search-field { width: 100%; padding: 10px 4px; }
-    .search-field + .search-field { border-left: none; border-top: 1px solid var(--border); padding-top: 14px; }
-    .search-btn { width: 100%; padding: 14px; border-radius: var(--radius-md); }
-    section.block { padding: 56px 0; }
-    .hero { padding: 56px 0 72px; }
-    .cta-card { padding: 48px 24px; }
-  }
-  @media (max-width: 500px) {
-    .stats { grid-template-columns: 1fr 1fr; padding: 24px; }
+    .hero-circle-1, .hero-circle-2, .hero-bubbles-left, .hero-bubbles-right { display: none; }
+    .hero { min-height: auto; }
+    .hero > .container { padding: 48px 22px 60px; }
+    .hero-search { flex-direction: column; padding: 12px; border-radius: var(--radius-lg); }
+    .hero-search button { width: 100%; padding: 12px; border-radius: var(--radius-md); }
   }
 </style>
 </head>
@@ -279,9 +377,7 @@
 <nav class="nav">
   <div class="container nav-inner">
     <a href="index.html" class="logo">
-      <span class="logo-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
-      </span>
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg></span>
       Pathway
     </a>
     <div class="nav-links">
@@ -293,110 +389,142 @@
     <div class="nav-cta">
       <a href="signin.html" class="btn btn-ghost">Sign in</a>
       <a href="signup.html" class="btn btn-primary">Get started</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
     </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
   </div>
 </nav>
-<div class="mobile-nav" id="mobileNav">
-  <a href="jobs.html">Browse jobs</a>
-  <a href="#how">How it works</a>
-  <a href="employers.html">For employers</a>
-  <a href="profile.html">Profile</a>
-  <div class="divider-line"></div>
-  <a href="signin.html" class="btn btn-ghost">Sign in</a>
-  <a href="signup.html" class="btn btn-primary">Get started</a>
+
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-backdrop" id="navBackdrop"></div>
+  <div class="nav-drawer-panel">
+    <button class="nav-drawer-close" id="navClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a href="jobs.html">Browse jobs</a>
+    <a href="#how">How it works</a>
+    <a href="employers.html">For employers</a>
+    <a href="profile.html">Profile</a>
+    <div class="nav-drawer-divider"></div>
+    <a href="signin.html">Sign in</a>
+    <a href="signup.html" style="color:var(--purple-700);">Get started →</a>
+  </div>
 </div>
 
 <!-- HERO -->
-<header class="hero">
-  <div class="container hero-inner">
-    <span class="badge"><span class="badge-dot"></span> 12,400+ new jobs this week</span>
-    <h1 class="hero-title">Find work <span class="accent">you love</span>.<br/>Land it faster.</h1>
-    <p class="hero-sub">
-      Search thousands of opportunities across every industry. We match you with companies that fit how you want to work.
-    </p>
+<section class="hero">
+  <div class="hero-circle-1"></div>
+  <div class="hero-bubbles-left">
+    <div class="job-bubble"><span class="bubble-dot"></span>Design</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Marketing</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Engineering</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Data Science</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Education</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Healthcare</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Hospitality</div>
+  </div>
 
-    <form class="search" id="heroSearchForm">
-      <label class="search-field">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="heroQuery" placeholder="Job title, keywords, or company" />
-      </label>
-      <label class="search-field">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <input type="text" id="heroLocation" placeholder="City, state, or remote" />
-      </label>
-      <button class="search-btn" type="submit">Search</button>
-    </form>
+  <div class="hero-circle-2"></div>
+  <div class="hero-bubbles-right">
+    <div class="job-bubble"><span class="bubble-dot"></span>Finance</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Sales</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Legal</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Product</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Operations</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Remote</div>
+  </div>
 
-    <div class="popular">
-      <span>Popular:</span>
-      <a href="jobs.html" class="chip">Remote</a>
-      <a href="jobs.html" class="chip">Engineering</a>
-      <a href="jobs.html" class="chip">Marketing</a>
-      <a href="jobs.html" class="chip">Healthcare</a>
-      <a href="jobs.html" class="chip">Entry level</a>
-    </div>
+  <div class="container">
+    <div class="hero-inner">
+      <span class="badge reveal"><span class="badge-dot"></span> 12,400+ new jobs this week</span>
+      <h1 class="hero-title reveal delay-1">Find work <span class="accent">you love.</span><br>Land it faster.</h1>
+      <p class="hero-sub reveal delay-2">Search thousands of opportunities across every industry. We match you with companies that fit how you want to work.</p>
 
-    <div class="stats">
-      <div><div class="stat-num">120K+</div><div class="stat-label">Active job listings</div></div>
-      <div><div class="stat-num">8,500</div><div class="stat-label">Hiring companies</div></div>
-      <div><div class="stat-num">2.1M</div><div class="stat-label">Members trust us</div></div>
-      <div><div class="stat-num">94%</div><div class="stat-label">Match satisfaction</div></div>
+      <form class="hero-search reveal delay-3" onsubmit="event.preventDefault(); const q = this.querySelector('input').value.trim(); window.location.href = 'jobs.html' + (q ? ('?q=' + encodeURIComponent(q)) : '');">
+        <input type="text" placeholder="Job title, keyword, or company…" />
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="hero-pop reveal delay-4">
+        <span>Popular:</span>
+        <a href="jobs.html?cat=engineering">Engineering</a>
+        <a href="jobs.html?cat=design">Design</a>
+        <a href="jobs.html?arrangement=remote">Remote</a>
+        <a href="jobs.html?cat=healthcare">Healthcare</a>
+      </div>
     </div>
   </div>
-</header>
+</section>
+
+<!-- STATS -->
+<section class="stats-strip">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat reveal">
+        <div class="stat-num"><span class="counter" data-count="120000" data-suffix="+">0</span></div>
+        <div class="stat-label">Active job listings</div>
+      </div>
+      <div class="stat reveal delay-1">
+        <div class="stat-num"><span class="counter" data-count="8500">0</span></div>
+        <div class="stat-label">Hiring companies</div>
+      </div>
+      <div class="stat reveal delay-2">
+        <div class="stat-num"><span class="counter" data-count="2.1" data-decimals="1" data-suffix="M">0</span></div>
+        <div class="stat-label">Members trust us</div>
+      </div>
+      <div class="stat reveal delay-3">
+        <div class="stat-num"><span class="counter" data-count="94" data-suffix="%">0</span></div>
+        <div class="stat-label">Match satisfaction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUSTED BY -->
+<section class="trusted">
+  <div class="container">
+    <div class="trusted-label reveal">Trusted by hiring teams at</div>
+    <div class="marquee reveal delay-1">
+      <div class="marquee-track">
+        <span class="marquee-logo">Aria Health</span>
+        <span class="marquee-logo">Lumen Labs</span>
+        <span class="marquee-logo">Northwind Co.</span>
+        <span class="marquee-logo">Verity Finance</span>
+        <span class="marquee-logo">Solstice Media</span>
+        <span class="marquee-logo">Meridian Hospital</span>
+        <span class="marquee-logo">Thornbridge Academy</span>
+        <!-- duplicate for seamless loop -->
+        <span class="marquee-logo">Aria Health</span>
+        <span class="marquee-logo">Lumen Labs</span>
+        <span class="marquee-logo">Northwind Co.</span>
+        <span class="marquee-logo">Verity Finance</span>
+        <span class="marquee-logo">Solstice Media</span>
+        <span class="marquee-logo">Meridian Hospital</span>
+        <span class="marquee-logo">Thornbridge Academy</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- CATEGORIES -->
-<section class="block" id="categories">
+<section class="block">
   <div class="container">
-    <div class="section-head">
-      <span class="section-eyebrow">Browse by category</span>
-      <h2 class="section-title">Explore opportunities across every industry</h2>
-      <p class="section-sub">From tech and design to healthcare and finance — find roles that match your skills.</p>
+    <div class="section-head reveal">
+      <span class="section-eyebrow">Explore by category</span>
+      <h2 class="section-title">Find your field</h2>
+      <p class="section-sub">Every kind of work, all in one place.</p>
     </div>
     <div class="categories">
-      <a href="jobs.html" class="cat-card">
-        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-        <div class="cat-name">Engineering & Tech</div>
-        <div class="cat-count">18,420 open roles</div>
-      </a>
-      <a href="jobs.html" class="cat-card">
-        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div>
-        <div class="cat-name">Design & Creative</div>
-        <div class="cat-count">7,820 open roles</div>
-      </a>
-      <a href="jobs.html" class="cat-card">
-        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg></div>
-        <div class="cat-name">Marketing & Sales</div>
-        <div class="cat-count">11,205 open roles</div>
-      </a>
-      <a href="jobs.html" class="cat-card">
-        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-        <div class="cat-name">Finance & Accounting</div>
-        <div class="cat-count">6,330 open roles</div>
-      </a>
-      <a href="jobs.html" class="cat-card">
-        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-        <div class="cat-name">Healthcare</div>
-        <div class="cat-count">14,902 open roles</div>
-      </a>
-      <a href="jobs.html" class="cat-card">
-        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
-        <div class="cat-name">Education</div>
-        <div class="cat-count">4,108 open roles</div>
-      </a>
-      <a href="jobs.html" class="cat-card">
-        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-        <div class="cat-name">Remote Roles</div>
-        <div class="cat-count">21,650 open roles</div>
-      </a>
-      <a href="jobs.html" class="cat-card">
-        <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div>
-        <div class="cat-name">Media & Entertainment</div>
-        <div class="cat-count">3,475 open roles</div>
-      </a>
+      <a href="jobs.html?cat=engineering" class="cat-card reveal"><div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div class="cat-name">Engineering &amp; Tech</div><div class="cat-count">18,420 open roles</div></a>
+      <a href="jobs.html?cat=design" class="cat-card reveal delay-1"><div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div><div class="cat-name">Design &amp; Creative</div><div class="cat-count">7,820 open roles</div></a>
+      <a href="jobs.html?cat=marketing" class="cat-card reveal delay-2"><div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg></div><div class="cat-name">Marketing &amp; Sales</div><div class="cat-count">11,205 open roles</div></a>
+      <a href="jobs.html?cat=finance" class="cat-card reveal delay-3"><div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="cat-name">Finance &amp; Accounting</div><div class="cat-count">6,330 open roles</div></a>
+      <a href="jobs.html?cat=healthcare" class="cat-card reveal"><div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><div class="cat-name">Healthcare</div><div class="cat-count">14,902 open roles</div></a>
+      <a href="jobs.html?cat=education" class="cat-card reveal delay-1"><div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div><div class="cat-name">Education</div><div class="cat-count">4,108 open roles</div></a>
+      <a href="jobs.html?arrangement=remote" class="cat-card reveal delay-2"><div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="cat-name">Remote Roles</div><div class="cat-count">21,650 open roles</div></a>
+      <a href="jobs.html?cat=media" class="cat-card reveal delay-3"><div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div><div class="cat-name">Media &amp; Entertainment</div><div class="cat-count">3,475 open roles</div></a>
     </div>
   </div>
 </section>
@@ -404,30 +532,15 @@
 <!-- HOW IT WORKS -->
 <section class="block how" id="how">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-eyebrow">How it works</span>
       <h2 class="section-title">Three steps to your next role</h2>
       <p class="section-sub">A clean, distraction-free process built around what actually helps you get hired.</p>
     </div>
     <div class="steps">
-      <div class="step">
-        <span class="step-num">01</span>
-        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <h3>Build your profile</h3>
-        <p>Tell us about your experience and what you're looking for. It takes about five minutes.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">02</span>
-        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-        <h3>Get matched</h3>
-        <p>Our system surfaces roles that fit your skills, salary expectations, and how you want to work.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">03</span>
-        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-        <h3>Apply in one click</h3>
-        <p>Send your application straight to hiring managers — no lengthy forms, no lost résumés.</p>
-      </div>
+      <div class="step reveal"><span class="step-num">01</span><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h3>Build your profile</h3><p>Tell us about your experience and what you're looking for. It takes about five minutes.</p></div>
+      <div class="step reveal delay-1"><span class="step-num">02</span><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><h3>Get matched</h3><p>Our system surfaces roles that fit your skills, salary expectations, and how you want to work.</p></div>
+      <div class="step reveal delay-2"><span class="step-num">03</span><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3>Apply in one click</h3><p>Send your application straight to hiring managers — no lengthy forms, no lost résumés.</p></div>
     </div>
   </div>
 </section>
@@ -435,80 +548,19 @@
 <!-- FEATURED JOBS -->
 <section class="block">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-eyebrow">Featured roles</span>
       <h2 class="section-title">Hand-picked jobs just for you</h2>
       <p class="section-sub">A small sample of what's live on Pathway right now.</p>
     </div>
     <div class="jobs-grid">
-      <a href="job.html" class="job-card">
-        <div class="job-logo">A</div>
-        <div class="job-body">
-          <div class="job-title-row">
-            <div>
-              <div class="job-title">Senior Product Designer</div>
-              <div class="job-company">Aria Health · Remote</div>
-            </div>
-            <div class="job-salary">$140k–$180k</div>
-          </div>
-          <div class="job-meta">
-            <span class="tag">Full-time</span>
-            <span class="tag">Remote</span>
-            <span class="tag">Healthcare</span>
-          </div>
-        </div>
-      </a>
-      <a href="job.html" class="job-card">
-        <div class="job-logo">N</div>
-        <div class="job-body">
-          <div class="job-title-row">
-            <div>
-              <div class="job-title">Marketing Manager</div>
-              <div class="job-company">Northwind Co. · New York, NY</div>
-            </div>
-            <div class="job-salary">$95k–$120k</div>
-          </div>
-          <div class="job-meta">
-            <span class="tag">Full-time</span>
-            <span class="tag">Hybrid</span>
-            <span class="tag">B2B</span>
-          </div>
-        </div>
-      </a>
-      <a href="job.html" class="job-card">
-        <div class="job-logo">L</div>
-        <div class="job-body">
-          <div class="job-title-row">
-            <div>
-              <div class="job-title">Backend Engineer</div>
-              <div class="job-company">Lumen Labs · Remote</div>
-            </div>
-            <div class="job-salary">$160k–$200k</div>
-          </div>
-          <div class="job-meta">
-            <span class="tag">Full-time</span>
-            <span class="tag">Python</span>
-            <span class="tag">Remote</span>
-          </div>
-        </div>
-      </a>
-      <a href="job.html" class="job-card">
-        <div class="job-logo">V</div>
-        <div class="job-body">
-          <div class="job-title-row">
-            <div>
-              <div class="job-title">Customer Success Lead</div>
-              <div class="job-company">Verity Finance · Austin, TX</div>
-            </div>
-            <div class="job-salary">$85k–$110k</div>
-          </div>
-          <div class="job-meta">
-            <span class="tag">Full-time</span>
-            <span class="tag">On-site</span>
-            <span class="tag">Finance</span>
-          </div>
-        </div>
-      </a>
+      <a href="job.html" class="job-card reveal"><div class="job-logo">A</div><div class="job-body"><div class="job-title-row"><div><div class="job-title">Senior Product Designer</div><div class="job-company">Aria Health · Remote</div></div><div class="job-salary">$140k–$180k</div></div><div class="job-meta"><span class="tag">Full-time</span><span class="tag">Remote</span><span class="tag">Healthcare</span></div></div></a>
+      <a href="job.html" class="job-card reveal delay-1"><div class="job-logo">N</div><div class="job-body"><div class="job-title-row"><div><div class="job-title">Marketing Manager</div><div class="job-company">Northwind Co. · New York, NY</div></div><div class="job-salary">$95k–$120k</div></div><div class="job-meta"><span class="tag">Full-time</span><span class="tag">Hybrid</span><span class="tag">B2B</span></div></div></a>
+      <a href="job.html" class="job-card reveal delay-2"><div class="job-logo">L</div><div class="job-body"><div class="job-title-row"><div><div class="job-title">Backend Engineer</div><div class="job-company">Lumen Labs · Remote</div></div><div class="job-salary">$160k–$200k</div></div><div class="job-meta"><span class="tag">Full-time</span><span class="tag">Python</span><span class="tag">Remote</span></div></div></a>
+      <a href="job.html" class="job-card reveal delay-3"><div class="job-logo">V</div><div class="job-body"><div class="job-title-row"><div><div class="job-title">Customer Success Lead</div><div class="job-company">Verity Finance · Austin, TX</div></div><div class="job-salary">$85k–$110k</div></div><div class="job-meta"><span class="tag">Full-time</span><span class="tag">On-site</span><span class="tag">Finance</span></div></div></a>
+    </div>
+    <div style="text-align:center;margin-top:32px;" class="reveal">
+      <a href="jobs.html" class="btn btn-outline btn-lg">Browse all jobs →</a>
     </div>
   </div>
 </section>
@@ -516,7 +568,7 @@
 <!-- CTA -->
 <section class="cta-section">
   <div class="container">
-    <div class="cta-card">
+    <div class="cta-card reveal">
       <h2>Ready to land your next role?</h2>
       <p>Join over two million people using Pathway to find work that fits their life.</p>
       <div class="cta-actions">
@@ -532,78 +584,17 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo">
-          <span class="logo-mark">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
-          </span>
-          Pathway
-        </a>
+        <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg></span>Pathway</a>
         <p>Helping people find work they love — and helping companies find the people they need.</p>
       </div>
-      <div class="footer-col">
-        <h4>For job seekers</h4>
-        <ul>
-          <li><a href="jobs.html">Browse jobs</a></li>
-          <li><a href="profile.html">Your profile</a></li>
-          <li><a href="career-advice.html">Career advice</a></li>
-          <li><a href="salary-guide.html">Salary guide</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>For employers</h4>
-        <ul>
-          <li><a href="employers.html">Post a job</a></li>
-          <li><a href="employers.html#pricing">Pricing</a></li>
-          <li><a href="hiring-resources.html">Hiring resources</a></li>
-          <li><a href="contact.html">Contact sales</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="about.html">About</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="careers.html">Careers</a></li>
-          <li><a href="privacy.html">Privacy</a></li>
-        </ul>
-      </div>
+      <div class="footer-col"><h4>For job seekers</h4><ul><li><a href="jobs.html">Browse jobs</a></li><li><a href="profile.html">Your profile</a></li><li><a href="career-advice.html">Career advice</a></li><li><a href="salary-guide.html">Salary guide</a></li></ul></div>
+      <div class="footer-col"><h4>For employers</h4><ul><li><a href="employers.html">Post a job</a></li><li><a href="employers.html#pricing">Pricing</a></li><li><a href="hiring-resources.html">Hiring resources</a></li><li><a href="contact.html">Contact sales</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="blog.html">Blog</a></li><li><a href="careers.html">Careers</a></li><li><a href="privacy.html">Privacy</a></li></ul></div>
     </div>
-    <div class="footer-bottom">
-      <div>© 2026 Pathway. All rights reserved.</div>
-      <div>Made with care.</div>
-    </div>
+    <div class="footer-bottom"><div>© 2026 Pathway. All rights reserved.</div><div>Made with care.</div></div>
   </div>
 </footer>
 
-<script>
-  // Mobile nav
-  (function() {
-    const toggle = document.getElementById('navToggle');
-    const mobileNav = document.getElementById('mobileNav');
-    if (!toggle || !mobileNav) return;
-    toggle.addEventListener('click', () => {
-      const open = mobileNav.classList.toggle('open');
-      toggle.classList.toggle('open', open);
-      toggle.setAttribute('aria-expanded', open);
-    });
-    document.addEventListener('click', (e) => {
-      if (!toggle.contains(e.target) && !mobileNav.contains(e.target)) {
-        mobileNav.classList.remove('open');
-        toggle.classList.remove('open');
-      }
-    });
-  })();
-
-  // Hero search → jobs.html with query params
-  document.getElementById('heroSearchForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const q = document.getElementById('heroQuery').value.trim();
-    const loc = document.getElementById('heroLocation').value.trim();
-    const params = new URLSearchParams();
-    if (q) params.set('q', q);
-    if (loc) params.set('loc', loc);
-    window.location.href = 'jobs.html' + (params.toString() ? '?' + params.toString() : '');
-  });
-</script>
+<script src="nav.js"></script>
 </body>
 </html>
