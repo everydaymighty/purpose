@@ -22,7 +22,22 @@
       radial-gradient(ellipse 70% 60% at 100% 60%,  var(--purple-100) 0%, transparent 55%),
       linear-gradient(165deg, #e8e3ff 0%, #f0ecff 35%, #f8f6ff 65%, #eeeaff 100%);
   }
-  .hero > .container { width: 100%; padding: 80px 24px; }
+  .hero > .container { width: 100%; padding: 80px 24px 140px; }
+
+  /* Soft blend at the bottom edge of the hero so it melts into the
+     body's lavender gradient instead of cutting off hard. */
+  .hero::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 220px;
+    background: linear-gradient(to bottom,
+      rgba(237, 230, 255, 0) 0%,
+      rgba(232, 224, 255, 0.6) 50%,
+      rgba(226, 214, 255, 0.95) 100%);
+    z-index: 5;
+    pointer-events: none;
+  }
 
   @keyframes floatA {
     0%   { transform: translateY(-50%) translateX(0px); }
@@ -116,13 +131,18 @@
     pointer-events: none;
     animation: floatA 18s ease-in-out infinite;
   }
-  .hero-bubbles-left .job-bubble:nth-child(1) { top: 12%; left: 32%; animation: bubbleFloat 14s ease-in-out infinite 0s; }
-  .hero-bubbles-left .job-bubble:nth-child(2) { top: 24%; left: 14%; animation: bubbleFloat 16s ease-in-out infinite 2s; }
-  .hero-bubbles-left .job-bubble:nth-child(3) { top: 38%; left: 28%; animation: bubbleFloat 13s ease-in-out infinite 1s; }
-  .hero-bubbles-left .job-bubble:nth-child(4) { top: 52%; left: 12%; animation: bubbleFloat 17s ease-in-out infinite 3s; }
-  .hero-bubbles-left .job-bubble:nth-child(5) { top: 65%; left: 26%; animation: bubbleFloat 15s ease-in-out infinite 0.5s; }
-  .hero-bubbles-left .job-bubble:nth-child(6) { top: 78%; left: 34%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
-  .hero-bubbles-left .job-bubble:nth-child(7) { top: 8%; left: 18%; animation: bubbleFloat 19s ease-in-out infinite 2.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(1)  { top: 8%;  left: 22%; animation: bubbleFloat 14s ease-in-out infinite 0s; }
+  .hero-bubbles-left .job-bubble:nth-child(2)  { top: 16%; left: 38%; animation: bubbleFloat 16s ease-in-out infinite 2s; }
+  .hero-bubbles-left .job-bubble:nth-child(3)  { top: 22%; left: 12%; animation: bubbleFloat 13s ease-in-out infinite 1s; }
+  .hero-bubbles-left .job-bubble:nth-child(4)  { top: 30%; left: 30%; animation: bubbleFloat 17s ease-in-out infinite 3s; }
+  .hero-bubbles-left .job-bubble:nth-child(5)  { top: 38%; left: 14%; animation: bubbleFloat 15s ease-in-out infinite 0.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(6)  { top: 45%; left: 32%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(7)  { top: 53%; left: 18%; animation: bubbleFloat 19s ease-in-out infinite 2.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(8)  { top: 60%; left: 36%; animation: bubbleFloat 14s ease-in-out infinite 1.2s; }
+  .hero-bubbles-left .job-bubble:nth-child(9)  { top: 68%; left: 14%; animation: bubbleFloat 16s ease-in-out infinite 0.8s; }
+  .hero-bubbles-left .job-bubble:nth-child(10) { top: 75%; left: 28%; animation: bubbleFloat 17s ease-in-out infinite 3.2s; }
+  .hero-bubbles-left .job-bubble:nth-child(11) { top: 84%; left: 18%; animation: bubbleFloat 15s ease-in-out infinite 1.8s; }
+  .hero-bubbles-left .job-bubble:nth-child(12) { top: 90%; left: 34%; animation: bubbleFloat 19s ease-in-out infinite 0.4s; }
 
   .hero-bubbles-right {
     position: absolute;
@@ -134,12 +154,17 @@
     pointer-events: none;
     animation: floatB 22s ease-in-out infinite;
   }
-  .hero-bubbles-right .job-bubble:nth-child(1) { top: 15%; right: 22%; animation: bubbleFloat 16s ease-in-out infinite 1s; }
-  .hero-bubbles-right .job-bubble:nth-child(2) { top: 30%; right: 10%; animation: bubbleFloat 14s ease-in-out infinite 3s; }
-  .hero-bubbles-right .job-bubble:nth-child(3) { top: 45%; right: 24%; animation: bubbleFloat 17s ease-in-out infinite 0s; }
-  .hero-bubbles-right .job-bubble:nth-child(4) { top: 59%; right: 12%; animation: bubbleFloat 13s ease-in-out infinite 2s; }
-  .hero-bubbles-right .job-bubble:nth-child(5) { top: 72%; right: 26%; animation: bubbleFloat 15s ease-in-out infinite 4s; }
-  .hero-bubbles-right .job-bubble:nth-child(6) { top: 84%; right: 18%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
+  .hero-bubbles-right .job-bubble:nth-child(1)  { top: 8%;  right: 30%; animation: bubbleFloat 16s ease-in-out infinite 1s; }
+  .hero-bubbles-right .job-bubble:nth-child(2)  { top: 16%; right: 14%; animation: bubbleFloat 14s ease-in-out infinite 3s; }
+  .hero-bubbles-right .job-bubble:nth-child(3)  { top: 25%; right: 28%; animation: bubbleFloat 17s ease-in-out infinite 0s; }
+  .hero-bubbles-right .job-bubble:nth-child(4)  { top: 33%; right: 12%; animation: bubbleFloat 13s ease-in-out infinite 2s; }
+  .hero-bubbles-right .job-bubble:nth-child(5)  { top: 42%; right: 24%; animation: bubbleFloat 15s ease-in-out infinite 4s; }
+  .hero-bubbles-right .job-bubble:nth-child(6)  { top: 50%; right: 10%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
+  .hero-bubbles-right .job-bubble:nth-child(7)  { top: 58%; right: 32%; animation: bubbleFloat 16s ease-in-out infinite 0.6s; }
+  .hero-bubbles-right .job-bubble:nth-child(8)  { top: 66%; right: 16%; animation: bubbleFloat 14s ease-in-out infinite 2.8s; }
+  .hero-bubbles-right .job-bubble:nth-child(9)  { top: 74%; right: 28%; animation: bubbleFloat 17s ease-in-out infinite 1.4s; }
+  .hero-bubbles-right .job-bubble:nth-child(10) { top: 82%; right: 12%; animation: bubbleFloat 15s ease-in-out infinite 3.6s; }
+  .hero-bubbles-right .job-bubble:nth-child(11) { top: 90%; right: 24%; animation: bubbleFloat 18s ease-in-out infinite 0.2s; }
 
   .hero-inner {
     position: relative; z-index: 3;
@@ -359,56 +384,102 @@
   .cta-actions .btn-outline { border-color: rgba(255,255,255,.4); color: white; background: transparent; }
   .cta-actions .btn-outline:hover { background: rgba(255,255,255,.1); border-color: white; color: white; }
 
-  /* Big slow bubble that spawns when a category card is clicked */
+  /* Big slow bubble that rises from the center when a category is clicked.
+     Lives over the viewport, drifts up with a soft scale, then fades. */
+  .popup-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 199;
+    background: radial-gradient(circle at 50% 55%,
+      rgba(196, 181, 253, 0.35) 0%,
+      rgba(76, 29, 149, 0.18) 50%,
+      rgba(46, 16, 101, 0.05) 100%);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    animation: popupBackdrop 2600ms ease-out forwards;
+  }
+  @keyframes popupBackdrop {
+    0%   { opacity: 0; }
+    15%  { opacity: 1; }
+    75%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
   .popup-bubble {
     position: fixed;
-    left: 6vw;
-    bottom: 8vh;
+    left: 50%; top: 50%;
     z-index: 200;
-    padding: 22px 32px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    min-width: 280px;
+    max-width: min(520px, 88vw);
+    padding: 36px 44px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1.5px solid rgba(167, 139, 250, 0.55);
-    border-radius: 999px;
-    box-shadow: 0 24px 64px rgba(80, 22, 200, 0.28);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    font-family: var(--font-display);
-    font-size: clamp(20px, 3vw, 32px);
-    color: var(--purple-800);
-    white-space: nowrap;
+    border-radius: 56px;
+    box-shadow:
+      0 30px 80px rgba(80, 22, 200, 0.30),
+      0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+    text-align: center;
     pointer-events: none;
     opacity: 0;
-    transform: translateY(40px) scale(0.85);
-    animation: popupBubble 1500ms cubic-bezier(.2,.8,.3,1) forwards;
-  }
-  .popup-bubble .pb-dot {
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--purple-500), var(--purple-800));
-    box-shadow: 0 0 24px rgba(139, 92, 246, 0.55);
-    flex-shrink: 0;
+    transform: translate(-50%, calc(-50% + 60px)) scale(0.7);
+    animation: popupBubble 2600ms cubic-bezier(.16,.8,.24,1) forwards;
   }
   .popup-bubble .pb-icon {
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    background: var(--purple-100);
-    color: var(--purple-700);
+    width: 64px; height: 64px;
+    margin: 0 auto 14px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--purple-500), var(--purple-800));
+    color: white;
     display: grid; place-items: center;
-    flex-shrink: 0;
+    box-shadow: 0 12px 32px rgba(124, 58, 237, 0.4);
   }
-  .popup-bubble .pb-icon svg { width: 18px; height: 18px; }
+  .popup-bubble .pb-icon svg { width: 30px; height: 30px; }
+  .popup-bubble .pb-name {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4.5vw, 42px);
+    color: var(--purple-900);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+  .popup-bubble .pb-desc {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .popup-bubble .pb-meta {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--purple-700);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .popup-bubble .pb-meta::before,
+  .popup-bubble .pb-meta::after {
+    content: ""; display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--purple-300);
+  }
+
   @keyframes popupBubble {
-    0%   { opacity: 0; transform: translateY(40px) scale(0.85); }
-    20%  { opacity: 1; transform: translateY(-10px) scale(1.04); }
-    35%  { opacity: 1; transform: translateY(-20px) scale(1.0); }
-    80%  { opacity: 1; transform: translateY(-50px) scale(1.0); }
-    100% { opacity: 0; transform: translateY(-90px) scale(0.92); }
+    0%   { opacity: 0; transform: translate(-50%, calc(-50% + 60px)) scale(0.7); }
+    20%  { opacity: 1; transform: translate(-50%, calc(-50% + 4px)) scale(1.03); }
+    35%  { opacity: 1; transform: translate(-50%, -50%) scale(1.0); }
+    70%  { opacity: 1; transform: translate(-50%, calc(-50% - 30px)) scale(1.0); }
+    100% { opacity: 0; transform: translate(-50%, calc(-50% - 80px)) scale(0.94); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .popup-bubble { animation: none; opacity: 1; transform: none; }
+    .popup-bubble, .popup-backdrop { animation: none; opacity: 1; transform: translate(-50%, -50%); }
   }
 
   @media (max-width: 860px) {
@@ -420,13 +491,7 @@
     .hero > .container { padding: 48px 22px 60px; }
     .hero-search { flex-direction: column; padding: 12px; border-radius: var(--radius-lg); }
     .hero-search button { width: 100%; padding: 12px; border-radius: var(--radius-md); }
-    .popup-bubble { left: 50%; transform: translateX(-50%) translateY(40px) scale(0.85); }
-    @keyframes popupBubble {
-      0%   { opacity: 0; transform: translateX(-50%) translateY(40px) scale(0.85); }
-      20%  { opacity: 1; transform: translateX(-50%) translateY(-10px) scale(1.04); }
-      80%  { opacity: 1; transform: translateX(-50%) translateY(-50px) scale(1.0); }
-      100% { opacity: 0; transform: translateX(-50%) translateY(-90px) scale(0.92); }
-    }
+    .popup-bubble { padding: 28px 28px; border-radius: 36px; }
   }
 </style>
 </head>
@@ -476,23 +541,33 @@
 <section class="hero">
   <div class="hero-circle-1"></div>
   <div class="hero-bubbles-left">
+    <div class="job-bubble"><span class="bubble-dot"></span>Hospitality</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Design</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Customer Success</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Marketing</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Engineering</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Data Science</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Research</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Education</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Healthcare</div>
-    <div class="job-bubble"><span class="bubble-dot"></span>Hospitality</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Construction</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Trades</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Nonprofit</div>
   </div>
 
   <div class="hero-circle-2"></div>
   <div class="hero-bubbles-right">
     <div class="job-bubble"><span class="bubble-dot"></span>Finance</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Sales</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Operations</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Legal</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Product</div>
-    <div class="job-bubble"><span class="bubble-dot"></span>Operations</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Remote</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>HR</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Manufacturing</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Media</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Logistics</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Government</div>
   </div>
 
   <div class="container">
@@ -656,36 +731,55 @@
 
 <script src="nav.js"></script>
 <script>
-  // Category bubble pop: when you click a category, spawn a big slow
-  // bubble on the bottom-left, then navigate after it crests.
+  // Per-category descriptions used by the popup.
+  const categoryBlurbs = {
+    'Engineering & Tech':   'Build the systems people rely on. Backend, frontend, data, infra, ML.',
+    'Design & Creative':    'Craft how products look, feel, and communicate.',
+    'Marketing & Sales':    'Tell the story and find the people who want to hear it.',
+    'Finance & Accounting': 'Keep the numbers honest and the business healthy.',
+    'Healthcare':           'Care for people. From bedside to back office.',
+    'Education':            'Teach, mentor, and design the way people learn.',
+    'Remote Roles':         'Work from anywhere. We promise the listings are real.',
+    'Media & Entertainment':'Stories, sound, screens — the work behind what we watch.'
+  };
+
+  // Category click → big slow bubble rises from center, then navigates.
   document.querySelectorAll('.cat-card').forEach((card) => {
     card.addEventListener('click', (e) => {
-      // Don't intercept middle-click / cmd-click — let those open in new tab.
+      // Middle/cmd/ctrl click should still open in a new tab unmodified.
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
       e.preventDefault();
 
-      const href = card.getAttribute('href');
-      const name = card.querySelector('.cat-name')?.textContent?.trim() || 'Browse';
+      const href     = card.getAttribute('href');
+      const name     = card.querySelector('.cat-name')?.textContent?.trim() || 'Browse';
+      const count    = card.querySelector('.cat-count')?.textContent?.trim() || '';
       const iconHTML = card.querySelector('.cat-icon')?.innerHTML || '';
+      const blurb    = categoryBlurbs[name] || 'Find your next role in this field.';
 
-      // Build the bubble
+      // Backdrop dimmer
+      const backdrop = document.createElement('div');
+      backdrop.className = 'popup-backdrop';
+      document.body.appendChild(backdrop);
+
+      // Bubble
       const bubble = document.createElement('div');
       bubble.className = 'popup-bubble';
       bubble.setAttribute('role', 'status');
       bubble.setAttribute('aria-live', 'polite');
       bubble.innerHTML =
-        '<span class="pb-icon">' + iconHTML + '</span>' +
-        '<span>' + name + '</span>' +
-        '<span class="pb-dot"></span>';
+        '<div class="pb-icon">' + iconHTML + '</div>' +
+        '<div class="pb-name">' + name + '</div>' +
+        '<div class="pb-desc">' + blurb + '</div>' +
+        (count ? '<div class="pb-meta">' + count + '</div>' : '');
       document.body.appendChild(bubble);
 
-      // Navigate after the bubble has had its moment on screen
-      setTimeout(() => { window.location.href = href; }, 900);
-      // Clean up the DOM if the user stays
-      setTimeout(() => { bubble.remove(); }, 1700);
+      // Navigate well after the bubble has crested — gives it time to speak.
+      setTimeout(() => { window.location.href = href; }, 1700);
+      // Clean up if the user lingers (won't happen unless nav cancels).
+      setTimeout(() => { bubble.remove(); backdrop.remove(); }, 2700);
     });
 
-    // Keyboard accessibility: Enter / Space triggers the same effect
+    // Keyboard accessibility: Enter / Space behaves the same.
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
