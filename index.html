@@ -115,10 +115,33 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .job-bubble:hover {
+    background: #fff;
+    transform: scale(1.06);
+    box-shadow: 0 8px 24px rgba(80,22,200,0.22);
+    z-index: 5;
   }
   .bubble-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: var(--purple-500); flex-shrink: 0;
+  }
+
+  /* Smaller, distinct search bubble */
+  .search-bubble {
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--purple-700);
+    background: rgba(255,255,255,0.95);
+    border-color: var(--purple-300);
+  }
+  .search-bubble svg {
+    width: 14px; height: 14px;
+    color: var(--purple-700);
+    flex-shrink: 0;
   }
 
   .hero-bubbles-left {
@@ -128,21 +151,25 @@
     width: clamp(460px, 48vw, 720px);
     height: clamp(460px, 48vw, 720px);
     z-index: 2;
-    pointer-events: none;
+    pointer-events: none; /* container is pass-through; bubbles re-enable it */
     animation: floatA 18s ease-in-out infinite;
   }
-  .hero-bubbles-left .job-bubble:nth-child(1)  { top: 8%;  left: 22%; animation: bubbleFloat 14s ease-in-out infinite 0s; }
-  .hero-bubbles-left .job-bubble:nth-child(2)  { top: 16%; left: 38%; animation: bubbleFloat 16s ease-in-out infinite 2s; }
-  .hero-bubbles-left .job-bubble:nth-child(3)  { top: 22%; left: 12%; animation: bubbleFloat 13s ease-in-out infinite 1s; }
-  .hero-bubbles-left .job-bubble:nth-child(4)  { top: 30%; left: 30%; animation: bubbleFloat 17s ease-in-out infinite 3s; }
-  .hero-bubbles-left .job-bubble:nth-child(5)  { top: 38%; left: 14%; animation: bubbleFloat 15s ease-in-out infinite 0.5s; }
-  .hero-bubbles-left .job-bubble:nth-child(6)  { top: 45%; left: 32%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
-  .hero-bubbles-left .job-bubble:nth-child(7)  { top: 53%; left: 18%; animation: bubbleFloat 19s ease-in-out infinite 2.5s; }
-  .hero-bubbles-left .job-bubble:nth-child(8)  { top: 60%; left: 36%; animation: bubbleFloat 14s ease-in-out infinite 1.2s; }
-  .hero-bubbles-left .job-bubble:nth-child(9)  { top: 68%; left: 14%; animation: bubbleFloat 16s ease-in-out infinite 0.8s; }
-  .hero-bubbles-left .job-bubble:nth-child(10) { top: 75%; left: 28%; animation: bubbleFloat 17s ease-in-out infinite 3.2s; }
-  .hero-bubbles-left .job-bubble:nth-child(11) { top: 84%; left: 18%; animation: bubbleFloat 15s ease-in-out infinite 1.8s; }
-  .hero-bubbles-left .job-bubble:nth-child(12) { top: 90%; left: 34%; animation: bubbleFloat 19s ease-in-out infinite 0.4s; }
+  /* Loose, spread positions — bubbles cover almost the full orb area */
+  .hero-bubbles-left .job-bubble:nth-child(1)  { top: 6%;  left: 8%;  animation: bubbleFloat 14s ease-in-out infinite 0s; }
+  .hero-bubbles-left .job-bubble:nth-child(2)  { top: 12%; left: 38%; animation: bubbleFloat 16s ease-in-out infinite 2s; }
+  .hero-bubbles-left .job-bubble:nth-child(3)  { top: 20%; left: 22%; animation: bubbleFloat 13s ease-in-out infinite 1s; }
+  .hero-bubbles-left .job-bubble:nth-child(4)  { top: 27%; left: 50%; animation: bubbleFloat 17s ease-in-out infinite 3s; }
+  .hero-bubbles-left .job-bubble:nth-child(5)  { top: 34%; left: 8%;  animation: bubbleFloat 15s ease-in-out infinite 0.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(6)  { top: 42%; left: 32%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(7)  { top: 50%; left: 14%; animation: bubbleFloat 19s ease-in-out infinite 2.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(8)  { top: 56%; left: 44%; animation: bubbleFloat 14s ease-in-out infinite 1.2s; }
+  .hero-bubbles-left .job-bubble:nth-child(9)  { top: 64%; left: 24%; animation: bubbleFloat 16s ease-in-out infinite 0.8s; }
+  .hero-bubbles-left .job-bubble:nth-child(10) { top: 72%; left: 6%;  animation: bubbleFloat 17s ease-in-out infinite 3.2s; }
+  .hero-bubbles-left .job-bubble:nth-child(11) { top: 80%; left: 36%; animation: bubbleFloat 15s ease-in-out infinite 1.8s; }
+  .hero-bubbles-left .job-bubble:nth-child(12) { top: 88%; left: 16%; animation: bubbleFloat 19s ease-in-out infinite 0.4s; }
+  .hero-bubbles-left .job-bubble:nth-child(13) { top: 92%; left: 42%; animation: bubbleFloat 18s ease-in-out infinite 2.2s; }
+  /* Search bubble — small, distinct, lives among the cluster */
+  .hero-bubbles-left .search-bubble        { top: 46%; left: 56%; animation: bubbleFloat 16s ease-in-out infinite 1.6s; }
 
   .hero-bubbles-right {
     position: absolute;
@@ -154,17 +181,19 @@
     pointer-events: none;
     animation: floatB 22s ease-in-out infinite;
   }
-  .hero-bubbles-right .job-bubble:nth-child(1)  { top: 8%;  right: 30%; animation: bubbleFloat 16s ease-in-out infinite 1s; }
-  .hero-bubbles-right .job-bubble:nth-child(2)  { top: 16%; right: 14%; animation: bubbleFloat 14s ease-in-out infinite 3s; }
-  .hero-bubbles-right .job-bubble:nth-child(3)  { top: 25%; right: 28%; animation: bubbleFloat 17s ease-in-out infinite 0s; }
-  .hero-bubbles-right .job-bubble:nth-child(4)  { top: 33%; right: 12%; animation: bubbleFloat 13s ease-in-out infinite 2s; }
-  .hero-bubbles-right .job-bubble:nth-child(5)  { top: 42%; right: 24%; animation: bubbleFloat 15s ease-in-out infinite 4s; }
-  .hero-bubbles-right .job-bubble:nth-child(6)  { top: 50%; right: 10%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
-  .hero-bubbles-right .job-bubble:nth-child(7)  { top: 58%; right: 32%; animation: bubbleFloat 16s ease-in-out infinite 0.6s; }
-  .hero-bubbles-right .job-bubble:nth-child(8)  { top: 66%; right: 16%; animation: bubbleFloat 14s ease-in-out infinite 2.8s; }
-  .hero-bubbles-right .job-bubble:nth-child(9)  { top: 74%; right: 28%; animation: bubbleFloat 17s ease-in-out infinite 1.4s; }
-  .hero-bubbles-right .job-bubble:nth-child(10) { top: 82%; right: 12%; animation: bubbleFloat 15s ease-in-out infinite 3.6s; }
-  .hero-bubbles-right .job-bubble:nth-child(11) { top: 90%; right: 24%; animation: bubbleFloat 18s ease-in-out infinite 0.2s; }
+  .hero-bubbles-right .job-bubble:nth-child(1)  { top: 6%;  right: 8%;  animation: bubbleFloat 16s ease-in-out infinite 1s; }
+  .hero-bubbles-right .job-bubble:nth-child(2)  { top: 14%; right: 36%; animation: bubbleFloat 14s ease-in-out infinite 3s; }
+  .hero-bubbles-right .job-bubble:nth-child(3)  { top: 22%; right: 18%; animation: bubbleFloat 17s ease-in-out infinite 0s; }
+  .hero-bubbles-right .job-bubble:nth-child(4)  { top: 30%; right: 48%; animation: bubbleFloat 13s ease-in-out infinite 2s; }
+  .hero-bubbles-right .job-bubble:nth-child(5)  { top: 38%; right: 26%; animation: bubbleFloat 15s ease-in-out infinite 4s; }
+  .hero-bubbles-right .job-bubble:nth-child(6)  { top: 46%; right: 8%;  animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
+  .hero-bubbles-right .job-bubble:nth-child(7)  { top: 54%; right: 40%; animation: bubbleFloat 16s ease-in-out infinite 0.6s; }
+  .hero-bubbles-right .job-bubble:nth-child(8)  { top: 62%; right: 18%; animation: bubbleFloat 14s ease-in-out infinite 2.8s; }
+  .hero-bubbles-right .job-bubble:nth-child(9)  { top: 70%; right: 32%; animation: bubbleFloat 17s ease-in-out infinite 1.4s; }
+  .hero-bubbles-right .job-bubble:nth-child(10) { top: 78%; right: 8%;  animation: bubbleFloat 15s ease-in-out infinite 3.6s; }
+  .hero-bubbles-right .job-bubble:nth-child(11) { top: 86%; right: 22%; animation: bubbleFloat 18s ease-in-out infinite 0.2s; }
+  .hero-bubbles-right .job-bubble:nth-child(12) { top: 92%; right: 44%; animation: bubbleFloat 19s ease-in-out infinite 1.1s; }
+  .hero-bubbles-right .search-bubble        { top: 50%; right: 52%; animation: bubbleFloat 16s ease-in-out infinite 0.9s; }
 
   .hero-inner {
     position: relative; z-index: 3;
@@ -553,6 +582,11 @@
     <div class="job-bubble"><span class="bubble-dot"></span>Construction</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Trades</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Nonprofit</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Writing</div>
+    <button class="job-bubble search-bubble" type="button" data-search="true" aria-label="Quick search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Search…
+    </button>
   </div>
 
   <div class="hero-circle-2"></div>
@@ -568,6 +602,11 @@
     <div class="job-bubble"><span class="bubble-dot"></span>Media</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Logistics</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Government</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Real Estate</div>
+    <button class="job-bubble search-bubble" type="button" data-search="true" aria-label="Quick search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Search…
+    </button>
   </div>
 
   <div class="container">
@@ -731,60 +770,115 @@
 
 <script src="nav.js"></script>
 <script>
-  // Per-category descriptions used by the popup.
-  const categoryBlurbs = {
-    'Engineering & Tech':   'Build the systems people rely on. Backend, frontend, data, infra, ML.',
-    'Design & Creative':    'Craft how products look, feel, and communicate.',
-    'Marketing & Sales':    'Tell the story and find the people who want to hear it.',
-    'Finance & Accounting': 'Keep the numbers honest and the business healthy.',
-    'Healthcare':           'Care for people. From bedside to back office.',
-    'Education':            'Teach, mentor, and design the way people learn.',
-    'Remote Roles':         'Work from anywhere. We promise the listings are real.',
-    'Media & Entertainment':'Stories, sound, screens — the work behind what we watch.'
+  // ─── Descriptions, counts, and target URLs for everything clickable ───
+  // Keyed by the visible name. Both the big category cards AND the small
+  // floating hero bubbles look themselves up here.
+  const categoryInfo = {
+    'Engineering & Tech':   { blurb: 'Build the systems people rely on. Backend, frontend, data, infra, ML.', count: '18,420 open roles', href: 'jobs.html?cat=engineering' },
+    'Design & Creative':    { blurb: 'Craft how products look, feel, and communicate.',                       count: '7,820 open roles',  href: 'jobs.html?cat=design' },
+    'Marketing & Sales':    { blurb: 'Tell the story and find the people who want to hear it.',               count: '11,205 open roles', href: 'jobs.html?cat=marketing' },
+    'Finance & Accounting': { blurb: 'Keep the numbers honest and the business healthy.',                     count: '6,330 open roles',  href: 'jobs.html?cat=finance' },
+    'Healthcare':           { blurb: 'Care for people. From bedside to back office.',                          count: '14,902 open roles', href: 'jobs.html?cat=healthcare' },
+    'Education':            { blurb: 'Teach, mentor, and design the way people learn.',                       count: '4,108 open roles',  href: 'jobs.html?cat=education' },
+    'Remote Roles':         { blurb: 'Work from anywhere. We promise the listings are real.',                  count: '21,650 open roles', href: 'jobs.html?arrangement=remote' },
+    'Media & Entertainment':{ blurb: 'Stories, sound, screens — the work behind what we watch.',              count: '3,475 open roles',  href: 'jobs.html?cat=media' },
+    // Floating-bubble fields — short names, lighter copy
+    'Design':            { blurb: 'UX, UI, product, brand, illustration — the visual side of work.', count: '7,820 open roles', href: 'jobs.html?cat=design' },
+    'Marketing':         { blurb: 'Brand, content, growth, ops — get people to notice.',              count: '6,210 open roles', href: 'jobs.html?cat=marketing' },
+    'Engineering':       { blurb: 'Backend, frontend, mobile, infra, data, ML.',                       count: '18,420 open roles', href: 'jobs.html?cat=engineering' },
+    'Data Science':      { blurb: 'Turn raw data into the decisions a team makes.',                    count: '2,940 open roles', href: 'jobs.html?cat=data' },
+    'Research':          { blurb: 'User research, market research, scientific research.',              count: '1,108 open roles', href: 'jobs.html?cat=research' },
+    'Customer Success':  { blurb: 'Help customers get value from the product they bought.',            count: '3,612 open roles', href: 'jobs.html?cat=cs' },
+    'Hospitality':       { blurb: 'Restaurants, hotels, events — work that takes care of people.',     count: '8,940 open roles', href: 'jobs.html?cat=hospitality' },
+    'Construction':      { blurb: 'Build, manage, and lead crews on real-world projects.',             count: '5,308 open roles', href: 'jobs.html?cat=construction' },
+    'Trades':            { blurb: 'Electricians, plumbers, mechanics — skilled craft work.',           count: '4,720 open roles', href: 'jobs.html?cat=trades' },
+    'Nonprofit':         { blurb: 'Mission-driven work at organizations doing good.',                  count: '1,840 open roles', href: 'jobs.html?cat=nonprofit' },
+    'Writing':           { blurb: 'Copy, editorial, content, technical writing.',                      count: '980 open roles',   href: 'jobs.html?cat=writing' },
+    'Finance':           { blurb: 'Banking, accounting, FP&A, treasury, audit.',                       count: '6,330 open roles', href: 'jobs.html?cat=finance' },
+    'Sales':             { blurb: 'AE, SDR, partnerships, channel — close the deal.',                  count: '5,995 open roles', href: 'jobs.html?cat=sales' },
+    'Operations':        { blurb: 'Keep the machine running. Process, systems, logistics.',            count: '4,210 open roles', href: 'jobs.html?cat=ops' },
+    'Legal':             { blurb: 'In-house counsel, paralegals, compliance.',                          count: '1,420 open roles', href: 'jobs.html?cat=legal' },
+    'Product':           { blurb: 'Product management, product ops, product marketing.',                count: '3,180 open roles', href: 'jobs.html?cat=product' },
+    'Remote':            { blurb: 'Roles that are 100% remote, no relocation needed.',                  count: '21,650 open roles', href: 'jobs.html?arrangement=remote' },
+    'HR':                { blurb: 'People ops, recruiting, L&D, comp & benefits.',                      count: '1,995 open roles', href: 'jobs.html?cat=hr' },
+    'Manufacturing':     { blurb: 'Production, supply chain, quality, plant management.',               count: '3,640 open roles', href: 'jobs.html?cat=manufacturing' },
+    'Media':             { blurb: 'Editorial, production, broadcast, podcasting.',                      count: '2,108 open roles', href: 'jobs.html?cat=media' },
+    'Logistics':         { blurb: 'Transport, warehouse, fleet, supply chain.',                         count: '4,080 open roles', href: 'jobs.html?cat=logistics' },
+    'Government':        { blurb: 'Federal, state, and city roles — public service.',                   count: '1,612 open roles', href: 'jobs.html?cat=government' },
+    'Real Estate':       { blurb: 'Brokerage, property management, development.',                        count: '1,330 open roles', href: 'jobs.html?cat=realestate' }
   };
 
-  // Category click → big slow bubble rises from center, then navigates.
+  function spawnPopup({ name, blurb, count, iconHTML, href, navigateMs = 1700 }) {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'popup-backdrop';
+    document.body.appendChild(backdrop);
+
+    const bubble = document.createElement('div');
+    bubble.className = 'popup-bubble';
+    bubble.setAttribute('role', 'status');
+    bubble.setAttribute('aria-live', 'polite');
+    bubble.innerHTML =
+      (iconHTML ? '<div class="pb-icon">' + iconHTML + '</div>' : '') +
+      '<div class="pb-name">' + name + '</div>' +
+      '<div class="pb-desc">' + blurb + '</div>' +
+      (count ? '<div class="pb-meta">' + count + '</div>' : '');
+    document.body.appendChild(bubble);
+
+    if (href) setTimeout(() => { window.location.href = href; }, navigateMs);
+    setTimeout(() => { bubble.remove(); backdrop.remove(); }, 2700);
+  }
+
+  // ─── Category cards click → popup → navigate ───
   document.querySelectorAll('.cat-card').forEach((card) => {
     card.addEventListener('click', (e) => {
-      // Middle/cmd/ctrl click should still open in a new tab unmodified.
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
       e.preventDefault();
-
-      const href     = card.getAttribute('href');
-      const name     = card.querySelector('.cat-name')?.textContent?.trim() || 'Browse';
-      const count    = card.querySelector('.cat-count')?.textContent?.trim() || '';
-      const iconHTML = card.querySelector('.cat-icon')?.innerHTML || '';
-      const blurb    = categoryBlurbs[name] || 'Find your next role in this field.';
-
-      // Backdrop dimmer
-      const backdrop = document.createElement('div');
-      backdrop.className = 'popup-backdrop';
-      document.body.appendChild(backdrop);
-
-      // Bubble
-      const bubble = document.createElement('div');
-      bubble.className = 'popup-bubble';
-      bubble.setAttribute('role', 'status');
-      bubble.setAttribute('aria-live', 'polite');
-      bubble.innerHTML =
-        '<div class="pb-icon">' + iconHTML + '</div>' +
-        '<div class="pb-name">' + name + '</div>' +
-        '<div class="pb-desc">' + blurb + '</div>' +
-        (count ? '<div class="pb-meta">' + count + '</div>' : '');
-      document.body.appendChild(bubble);
-
-      // Navigate well after the bubble has crested — gives it time to speak.
-      setTimeout(() => { window.location.href = href; }, 1700);
-      // Clean up if the user lingers (won't happen unless nav cancels).
-      setTimeout(() => { bubble.remove(); backdrop.remove(); }, 2700);
+      const name = card.querySelector('.cat-name')?.textContent?.trim() || 'Browse';
+      const info = categoryInfo[name] || {};
+      spawnPopup({
+        name,
+        blurb:    info.blurb || 'Find your next role in this field.',
+        count:    info.count || card.querySelector('.cat-count')?.textContent?.trim() || '',
+        iconHTML: card.querySelector('.cat-icon')?.innerHTML || '',
+        href:     card.getAttribute('href')
+      });
     });
-
-    // Keyboard accessibility: Enter / Space behaves the same.
     card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        card.click();
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+    });
+  });
+
+  // ─── Floating hero bubbles click → popup → navigate ───
+  // Default icon used when a bubble doesn't have one in categoryInfo.
+  const DEFAULT_BUBBLE_ICON =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>';
+
+  document.querySelectorAll('.job-bubble').forEach((bubble) => {
+    bubble.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Search bubble — focus the hero search field instead of popping
+      if (bubble.dataset.search === 'true') {
+        const input = document.querySelector('.hero-search input');
+        if (input) {
+          input.focus({ preventScroll: true });
+          input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // brief glow to draw attention
+          input.style.transition = 'box-shadow .3s ease';
+          input.style.boxShadow = '0 0 0 4px rgba(167, 139, 250, 0.35)';
+          setTimeout(() => { input.style.boxShadow = ''; }, 1200);
+        }
+        return;
       }
+
+      const name = bubble.textContent.trim();
+      const info = categoryInfo[name] || {};
+      spawnPopup({
+        name,
+        blurb:    info.blurb || 'Find your next role in this field.',
+        count:    info.count || '',
+        iconHTML: DEFAULT_BUBBLE_ICON,
+        href:     info.href || ('jobs.html?q=' + encodeURIComponent(name))
+      });
     });
   });
 </script>
