@@ -40,16 +40,19 @@
   body > nav.nav { box-shadow: 0 8px 22px rgba(255, 255, 255, 0.4); }
 
   /* Soft blend at the bottom edge of the hero so it melts into the
-     body's lavender gradient instead of cutting off hard. */
+     body's lavender gradient instead of cutting off hard. The target
+     color matches the body's gradient at this scroll position. */
   .hero::after {
     content: "";
     position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 220px;
+    left: 0; right: 0; bottom: -1px;
+    height: 320px;
     background: linear-gradient(to bottom,
-      rgba(237, 230, 255, 0) 0%,
-      rgba(232, 224, 255, 0.6) 50%,
-      rgba(226, 214, 255, 0.95) 100%);
+      rgba(220, 211, 255, 0)    0%,
+      rgba(220, 211, 255, 0.35) 35%,
+      rgba(220, 211, 255, 0.72) 65%,
+      rgba(220, 211, 255, 0.95) 90%,
+      rgba(220, 211, 255, 1)    100%);
     z-index: 5;
     pointer-events: none;
   }
@@ -239,6 +242,27 @@
     gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  /* Circular search icon in the nav (top right) */
+  .nav-search-bubble {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid var(--purple-200);
+    color: var(--purple-700);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all .18s ease;
+  }
+  .nav-search-bubble svg { width: 16px; height: 16px; }
+  .nav-search-bubble:hover {
+    background: #fff;
+    border-color: var(--purple-400);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(76, 29, 149, 0.18);
+    color: var(--purple-800);
   }
 
   /* Small pill bubble for "Sign in" in the nav */
@@ -748,6 +772,9 @@
       <a href="profile.html">Profile</a>
     </div>
     <div class="nav-cta">
+      <button type="button" id="navSearchBtn" class="nav-search-bubble" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
       <a href="signin.html" class="nav-bubble">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
         Sign in
@@ -794,10 +821,6 @@
     <div class="job-bubble"><span class="bubble-dot"></span>Trades</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Nonprofit</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Writing</div>
-    <button class="job-bubble search-bubble" type="button" data-search="true" aria-label="Quick search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      Search…
-    </button>
   </div>
 
   <div class="hero-circle-2"></div>
@@ -814,10 +837,6 @@
     <div class="job-bubble"><span class="bubble-dot"></span>Logistics</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Government</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Real Estate</div>
-    <button class="job-bubble search-bubble" type="button" data-search="true" aria-label="Quick search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      Search…
-    </button>
   </div>
 
   <div class="container">
@@ -1142,20 +1161,6 @@
   document.querySelectorAll('.job-bubble').forEach((bubble) => {
     bubble.addEventListener('click', (e) => {
       e.preventDefault();
-
-      // Search bubble → take user straight to the full jobs page
-      if (bubble.dataset.search === 'true') {
-        openFieldModal({
-          name:     'Search every role',
-          blurb:    'Use full-text search, filters by location, type, salary, and remote-only — across 120K+ active listings.',
-          count:    '120,438 open roles',
-          iconHTML: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-          href:     'jobs.html',
-          companies: [['Lumen Labs','Worldwide','24 roles'],['Aria Health','US','18 roles'],['Solstice Media','Brooklyn, NY','9 roles'],['Verity Finance','Austin, TX','12 roles']]
-        });
-        return;
-      }
-
       const name = bubble.textContent.trim();
       const info = categoryInfo[name] || {};
       openFieldModal({
@@ -1168,6 +1173,26 @@
       });
     });
   });
+
+  // ─── Nav search icon → modal ───
+  const navSearchBtn = document.getElementById('navSearchBtn');
+  if (navSearchBtn) {
+    navSearchBtn.addEventListener('click', () => {
+      openFieldModal({
+        name:     'Search every role',
+        blurb:    'Full-text search across 120K+ active listings, filterable by location, type, salary, and remote-only.',
+        count:    '120,438 open roles',
+        iconHTML: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+        href:     'jobs.html',
+        companies: [
+          ['Lumen Labs','Worldwide','24 roles'],
+          ['Aria Health','US','18 roles'],
+          ['Solstice Media','Brooklyn, NY','9 roles'],
+          ['Verity Finance','Austin, TX','12 roles']
+        ]
+      });
+    });
+  }
 </script>
 </body>
 </html>
