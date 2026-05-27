@@ -729,5 +729,116 @@
   renderPage();
 </script>
 
+<!-- ===== ADZUNA REAL JOBS INTEGRATION =====================================
+     Fetches live jobs from Adzuna (https://developer.adzuna.com).
+     SIGN UP (free, 5 min):
+       1. Visit https://developer.adzuna.com/signup
+       2. Verify email, log in, create an app
+       3. Copy your App ID + App Key into the constants below
+     Each `redirect_url` Adzuna returns is your affiliate link — when a
+     user clicks "Apply" on a job, Adzuna pays you per click.
+     ====================================================================== -->
+<script>
+  const ADZUNA_APP_ID  = 'YOUR_APP_ID_HERE';    // <-- paste your App ID
+  const ADZUNA_APP_KEY = 'YOUR_APP_KEY_HERE';   // <-- paste your App Key
+  const ADZUNA_COUNTRY = 'us';                   // us, gb, au, ca, de, etc.
+
+  async function loadRealJobs() {
+    // Skip if no keys configured yet — fall back to hardcoded cards
+    if (ADZUNA_APP_ID.startsWith('YOUR_') || ADZUNA_APP_KEY.startsWith('YOUR_')) {
+      console.info('[Adzuna] No keys set — using demo jobs. See instructions in jobs.html.');
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const query  = params.get('q') || params.get('cat') || '';
+    const where  = params.get('where') || '';
+
+    const url = new URL(`https://api.adzuna.com/v1/api/jobs/${ADZUNA_COUNTRY}/search/1`);
+    url.searchParams.set('app_id',           ADZUNA_APP_ID);
+    url.searchParams.set('app_key',          ADZUNA_APP_KEY);
+    url.searchParams.set('results_per_page', '20');
+    url.searchParams.set('content-type',     'application/json');
+    if (query) url.searchParams.set('what',  query);
+    if (where) url.searchParams.set('where', where);
+
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      renderAdzunaResults(data);
+    } catch (err) {
+      console.warn('[Adzuna] fetch failed, keeping demo jobs:', err);
+    }
+  }
+
+  function renderAdzunaResults(data) {
+    const list  = document.getElementById('jobResults');
+    const count = document.getElementById('resultsCount');
+    if (!list || !data.results) return;
+
+    if (count) count.innerHTML = `<strong>${(data.count || data.results.length).toLocaleString()}</strong> live jobs from Adzuna`;
+    list.innerHTML = '';
+
+    for (const j of data.results) {
+      const salary = formatSalary(j.salary_min, j.salary_max);
+      const initial = (j.company?.display_name || '?').trim().charAt(0).toUpperCase();
+      const posted = relativeDate(j.created);
+      const tags   = [j.contract_time, j.contract_type, j.category?.label].filter(Boolean);
+
+      const card = document.createElement('a');
+      card.className = 'job-card';
+      card.href      = j.redirect_url;       // Adzuna's affiliate-tracked URL
+      card.target    = '_blank';
+      card.rel       = 'noopener nofollow sponsored';
+      card.innerHTML = `
+        <div class="job-logo">${initial}</div>
+        <div class="job-body">
+          <div class="job-title-row">
+            <div>
+              <div class="job-title">${escapeHTML(j.title)}</div>
+              <div class="job-company">${escapeHTML(j.company?.display_name || 'Unknown')} · ${escapeHTML(j.location?.display_name || '')}</div>
+            </div>
+            <div class="flex items-center">
+              ${salary ? `<div class="job-salary">${salary}</div>` : ''}
+            </div>
+          </div>
+          <div class="job-meta">
+            ${tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('')}
+          </div>
+          <div class="job-time">Posted ${posted}</div>
+        </div>`;
+      list.appendChild(card);
+    }
+
+    // Attribution required by Adzuna's terms
+    const attr = document.createElement('div');
+    attr.style.cssText = 'text-align:center; margin-top:24px; font-size:12px; color: var(--text-muted);';
+    attr.innerHTML = 'Live job data powered by <a href="https://www.adzuna.com" target="_blank" rel="noopener" style="color: var(--purple-700); font-weight:600;">Adzuna</a>';
+    list.appendChild(attr);
+  }
+
+  function formatSalary(min, max) {
+    if (!min && !max) return '';
+    const k = n => n >= 1000 ? '$' + Math.round(n / 1000) + 'k' : '$' + n;
+    if (min && max) return `${k(min)}–${k(max)}`;
+    return k(min || max);
+  }
+  function relativeDate(iso) {
+    if (!iso) return 'recently';
+    const days = Math.round((Date.now() - new Date(iso).getTime()) / 86400000);
+    if (days <= 0) return 'today';
+    if (days === 1) return 'yesterday';
+    if (days < 7)  return days + ' days ago';
+    if (days < 30) return Math.round(days / 7) + ' weeks ago';
+    return Math.round(days / 30) + ' months ago';
+  }
+  function escapeHTML(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]);
+  }
+
+  loadRealJobs();
+</script>
+
 </body>
 </html>
