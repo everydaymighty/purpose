@@ -23,21 +23,6 @@
       linear-gradient(165deg, #e8e3ff 0%, #f0ecff 35%, #f8f6ff 65%, #eeeaff 100%);
   }
   .hero > .container { width: 100%; padding: 64px 24px 160px; }
-  /* Top edge blend: a soft veil that hides the hard line where nav meets hero */
-  .hero::before {
-    content: "";
-    position: absolute;
-    left: 0; right: 0; top: 0;
-    height: 120px;
-    background: linear-gradient(to bottom,
-      rgba(255, 255, 255, 0.85) 0%,
-      rgba(248, 246, 255, 0.5) 50%,
-      transparent 100%);
-    z-index: 4;
-    pointer-events: none;
-  }
-  /* Nav also gets the same blur fade-through so its edge is invisible */
-  body > nav.nav { box-shadow: 0 8px 22px rgba(255, 255, 255, 0.4); }
 
   /* Soft blend at the bottom edge of the hero so it melts into the
      body's lavender gradient instead of cutting off hard. The target
@@ -172,22 +157,25 @@
     pointer-events: none; /* container is pass-through; bubbles re-enable it */
     animation: floatA 18s ease-in-out infinite;
   }
-  /* Loose, spread positions — bubbles cover almost the full orb area.
-     Min left is 20% so none get clipped by the viewport edge
-     (the orb container itself starts at -8% of the viewport). */
-  .hero-bubbles-left .job-bubble:nth-child(1)  { top: 6%;  left: 24%; animation: bubbleFloat 14s ease-in-out infinite 0s; }
-  .hero-bubbles-left .job-bubble:nth-child(2)  { top: 12%; left: 44%; animation: bubbleFloat 16s ease-in-out infinite 2s; }
-  .hero-bubbles-left .job-bubble:nth-child(3)  { top: 20%; left: 32%; animation: bubbleFloat 13s ease-in-out infinite 1s; }
-  .hero-bubbles-left .job-bubble:nth-child(4)  { top: 28%; left: 54%; animation: bubbleFloat 17s ease-in-out infinite 3s; }
-  .hero-bubbles-left .job-bubble:nth-child(5)  { top: 35%; left: 22%; animation: bubbleFloat 15s ease-in-out infinite 0.5s; }
-  .hero-bubbles-left .job-bubble:nth-child(6)  { top: 42%; left: 40%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
-  .hero-bubbles-left .job-bubble:nth-child(7)  { top: 50%; left: 26%; animation: bubbleFloat 19s ease-in-out infinite 2.5s; }
-  .hero-bubbles-left .job-bubble:nth-child(8)  { top: 57%; left: 48%; animation: bubbleFloat 14s ease-in-out infinite 1.2s; }
-  .hero-bubbles-left .job-bubble:nth-child(9)  { top: 64%; left: 30%; animation: bubbleFloat 16s ease-in-out infinite 0.8s; }
-  .hero-bubbles-left .job-bubble:nth-child(10) { top: 72%; left: 22%; animation: bubbleFloat 17s ease-in-out infinite 3.2s; }
-  .hero-bubbles-left .job-bubble:nth-child(11) { top: 80%; left: 40%; animation: bubbleFloat 15s ease-in-out infinite 1.8s; }
-  .hero-bubbles-left .job-bubble:nth-child(12) { top: 88%; left: 26%; animation: bubbleFloat 19s ease-in-out infinite 0.4s; }
-  .hero-bubbles-left .job-bubble:nth-child(13) { top: 93%; left: 48%; animation: bubbleFloat 18s ease-in-out infinite 2.2s; }
+  /* Positions are arranged so each bubble's distance from the center
+     of the orb (50%, 50%) stays under ~42% — keeps them visually
+     inside the circle, not the inscribed square. */
+  .hero-bubbles-left .job-bubble:nth-child(1)  { top: 16%; left: 32%; animation: bubbleFloat 14s ease-in-out infinite 0s; }
+  .hero-bubbles-left .job-bubble:nth-child(2)  { top: 14%; left: 50%; animation: bubbleFloat 16s ease-in-out infinite 2s; }
+  .hero-bubbles-left .job-bubble:nth-child(3)  { top: 24%; left: 38%; animation: bubbleFloat 13s ease-in-out infinite 1s; }
+  .hero-bubbles-left .job-bubble:nth-child(4)  { top: 28%; left: 56%; animation: bubbleFloat 17s ease-in-out infinite 3s; }
+  .hero-bubbles-left .job-bubble:nth-child(5)  { top: 35%; left: 28%; animation: bubbleFloat 15s ease-in-out infinite 0.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(6)  { top: 42%; left: 44%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(7)  { top: 50%; left: 30%; animation: bubbleFloat 19s ease-in-out infinite 2.5s; }
+  .hero-bubbles-left .job-bubble:nth-child(8)  { top: 50%; left: 54%; animation: bubbleFloat 14s ease-in-out infinite 1.2s; }
+  .hero-bubbles-left .job-bubble:nth-child(9)  { top: 58%; left: 36%; animation: bubbleFloat 16s ease-in-out infinite 0.8s; }
+  .hero-bubbles-left .job-bubble:nth-child(10) { top: 64%; left: 50%; animation: bubbleFloat 17s ease-in-out infinite 3.2s; }
+  .hero-bubbles-left .job-bubble:nth-child(11) { top: 70%; left: 32%; animation: bubbleFloat 15s ease-in-out infinite 1.8s; }
+  .hero-bubbles-left .job-bubble:nth-child(12) { top: 76%; left: 46%; animation: bubbleFloat 19s ease-in-out infinite 0.4s; }
+  .hero-bubbles-left .job-bubble:nth-child(13) { top: 82%; left: 36%; animation: bubbleFloat 18s ease-in-out infinite 2.2s; }
+  .hero-bubbles-left .job-bubble:nth-child(14) { top: 36%; left: 52%; animation: bubbleFloat 15s ease-in-out infinite 1.1s; }
+  .hero-bubbles-left .job-bubble:nth-child(15) { top: 86%; left: 50%; animation: bubbleFloat 17s ease-in-out infinite 0.6s; }
+  .hero-bubbles-left .job-bubble:nth-child(16) { top: 20%; left: 26%; animation: bubbleFloat 14s ease-in-out infinite 3.3s; }
 
   .hero-bubbles-right {
     position: absolute;
@@ -199,22 +187,24 @@
     pointer-events: none;
     animation: floatB 22s ease-in-out infinite;
   }
-  /* Right cluster — min right is 20% to stay off the viewport edge */
-  .hero-bubbles-right .job-bubble:nth-child(1)  { top: 6%;  right: 22%; animation: bubbleFloat 16s ease-in-out infinite 1s; }
-  .hero-bubbles-right .job-bubble:nth-child(2)  { top: 12%; right: 40%; animation: bubbleFloat 14s ease-in-out infinite 3s; }
-  .hero-bubbles-right .job-bubble:nth-child(3)  { top: 19%; right: 26%; animation: bubbleFloat 17s ease-in-out infinite 0s; }
-  .hero-bubbles-right .job-bubble:nth-child(4)  { top: 26%; right: 48%; animation: bubbleFloat 13s ease-in-out infinite 2s; }
-  .hero-bubbles-right .job-bubble:nth-child(5)  { top: 33%; right: 30%; animation: bubbleFloat 15s ease-in-out infinite 4s; }
-  .hero-bubbles-right .job-bubble:nth-child(6)  { top: 40%; right: 22%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
-  .hero-bubbles-right .job-bubble:nth-child(7)  { top: 47%; right: 42%; animation: bubbleFloat 16s ease-in-out infinite 0.6s; }
-  .hero-bubbles-right .job-bubble:nth-child(8)  { top: 54%; right: 28%; animation: bubbleFloat 14s ease-in-out infinite 2.8s; }
-  .hero-bubbles-right .job-bubble:nth-child(9)  { top: 61%; right: 50%; animation: bubbleFloat 17s ease-in-out infinite 1.4s; }
-  .hero-bubbles-right .job-bubble:nth-child(10) { top: 68%; right: 24%; animation: bubbleFloat 15s ease-in-out infinite 3.6s; }
-  .hero-bubbles-right .job-bubble:nth-child(11) { top: 75%; right: 38%; animation: bubbleFloat 18s ease-in-out infinite 0.2s; }
-  .hero-bubbles-right .job-bubble:nth-child(12) { top: 82%; right: 22%; animation: bubbleFloat 19s ease-in-out infinite 1.1s; }
-  .hero-bubbles-right .job-bubble:nth-child(13) { top: 88%; right: 44%; animation: bubbleFloat 16s ease-in-out infinite 2.4s; }
-  .hero-bubbles-right .job-bubble:nth-child(14) { top: 93%; right: 30%; animation: bubbleFloat 15s ease-in-out infinite 0.7s; }
-  .hero-bubbles-right .job-bubble:nth-child(15) { top: 4%;  right: 38%; animation: bubbleFloat 17s ease-in-out infinite 1.9s; }
+  /* Right cluster — same circular constraint */
+  .hero-bubbles-right .job-bubble:nth-child(1)  { top: 14%; right: 32%; animation: bubbleFloat 16s ease-in-out infinite 1s; }
+  .hero-bubbles-right .job-bubble:nth-child(2)  { top: 18%; right: 48%; animation: bubbleFloat 14s ease-in-out infinite 3s; }
+  .hero-bubbles-right .job-bubble:nth-child(3)  { top: 24%; right: 36%; animation: bubbleFloat 17s ease-in-out infinite 0s; }
+  .hero-bubbles-right .job-bubble:nth-child(4)  { top: 26%; right: 52%; animation: bubbleFloat 13s ease-in-out infinite 2s; }
+  .hero-bubbles-right .job-bubble:nth-child(5)  { top: 32%; right: 28%; animation: bubbleFloat 15s ease-in-out infinite 4s; }
+  .hero-bubbles-right .job-bubble:nth-child(6)  { top: 38%; right: 42%; animation: bubbleFloat 18s ease-in-out infinite 1.5s; }
+  .hero-bubbles-right .job-bubble:nth-child(7)  { top: 44%; right: 30%; animation: bubbleFloat 16s ease-in-out infinite 0.6s; }
+  .hero-bubbles-right .job-bubble:nth-child(8)  { top: 50%; right: 50%; animation: bubbleFloat 14s ease-in-out infinite 2.8s; }
+  .hero-bubbles-right .job-bubble:nth-child(9)  { top: 52%; right: 32%; animation: bubbleFloat 17s ease-in-out infinite 1.4s; }
+  .hero-bubbles-right .job-bubble:nth-child(10) { top: 58%; right: 44%; animation: bubbleFloat 15s ease-in-out infinite 3.6s; }
+  .hero-bubbles-right .job-bubble:nth-child(11) { top: 62%; right: 28%; animation: bubbleFloat 18s ease-in-out infinite 0.2s; }
+  .hero-bubbles-right .job-bubble:nth-child(12) { top: 68%; right: 50%; animation: bubbleFloat 19s ease-in-out infinite 1.1s; }
+  .hero-bubbles-right .job-bubble:nth-child(13) { top: 72%; right: 36%; animation: bubbleFloat 16s ease-in-out infinite 2.4s; }
+  .hero-bubbles-right .job-bubble:nth-child(14) { top: 78%; right: 46%; animation: bubbleFloat 15s ease-in-out infinite 0.7s; }
+  .hero-bubbles-right .job-bubble:nth-child(15) { top: 82%; right: 32%; animation: bubbleFloat 17s ease-in-out infinite 1.9s; }
+  .hero-bubbles-right .job-bubble:nth-child(16) { top: 86%; right: 48%; animation: bubbleFloat 14s ease-in-out infinite 2.6s; }
+  .hero-bubbles-right .job-bubble:nth-child(17) { top: 36%; right: 56%; animation: bubbleFloat 18s ease-in-out infinite 1.3s; }
 
   .hero-inner {
     position: relative; z-index: 3;
@@ -247,26 +237,35 @@
     flex-wrap: wrap;
   }
 
-  /* Circular search icon in the nav (top right) */
-  .nav-search-bubble {
-    width: 46px; height: 46px;
+  /* Floating search FAB — sits inside the hero, below the nav */
+  .hero-search-fab {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    z-index: 10;
+    width: 56px; height: 56px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     border: 1.5px solid var(--purple-300);
     color: var(--purple-700);
     display: grid;
     place-items: center;
     cursor: pointer;
-    transition: all .18s ease;
-    box-shadow: 0 4px 14px rgba(76, 29, 149, 0.10);
+    transition: all .2s ease;
+    box-shadow: 0 10px 26px rgba(76, 29, 149, 0.18);
+    animation: bubbleFloat 8s ease-in-out infinite;
   }
-  .nav-search-bubble svg { width: 20px; height: 20px; stroke-width: 2.2; }
-  .nav-search-bubble:hover {
+  .hero-search-fab svg { width: 22px; height: 22px; }
+  .hero-search-fab:hover {
     background: #fff;
-    border-color: var(--purple-400);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(76, 29, 149, 0.18);
+    border-color: var(--purple-500);
     color: var(--purple-800);
+    transform: scale(1.08);
+    box-shadow: 0 14px 34px rgba(76, 29, 149, 0.28);
+  }
+  @media (max-width: 600px) {
+    .hero-search-fab { width: 48px; height: 48px; top: 16px; right: 16px; }
+    .hero-search-fab svg { width: 18px; height: 18px; }
   }
 
   /* Small pill bubble for "Sign in" in the nav */
@@ -776,9 +775,6 @@
       <a href="profile.html">Profile</a>
     </div>
     <div class="nav-cta">
-      <button type="button" id="navSearchBtn" class="nav-search-bubble" aria-label="Search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
       <a href="signin.html" class="nav-bubble">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
         Sign in
@@ -810,6 +806,11 @@
 
 <!-- HERO -->
 <section class="hero">
+  <!-- Floating search bubble — sits below the nav, top-right of hero -->
+  <button type="button" id="navSearchBtn" class="hero-search-fab" aria-label="Search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+  </button>
+
   <div class="hero-circle-1"></div>
   <div class="hero-bubbles-left">
     <div class="job-bubble"><span class="bubble-dot"></span>Hospitality</div>
@@ -825,6 +826,9 @@
     <div class="job-bubble"><span class="bubble-dot"></span>Trades</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Nonprofit</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Writing</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Architecture</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Agriculture</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Veterinary</div>
   </div>
 
   <div class="hero-circle-2"></div>
@@ -844,6 +848,8 @@
     <div class="job-bubble"><span class="bubble-dot"></span>Insurance</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Aerospace</div>
     <div class="job-bubble"><span class="bubble-dot"></span>Pharma</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Energy</div>
+    <div class="job-bubble"><span class="bubble-dot"></span>Retail</div>
   </div>
 
   <div class="container">
@@ -1035,7 +1041,12 @@
     'Real Estate':       { blurb: 'Brokerage, property management, development.',                        count: '1,330 open roles', href: 'jobs.html?cat=realestate' },
     'Insurance':         { blurb: 'Underwriting, claims, actuarial, broker, agency.',                    count: '2,070 open roles', href: 'jobs.html?cat=insurance' },
     'Aerospace':         { blurb: 'Engineering, manufacturing, ops, and flight for the sky.',            count: '880 open roles',   href: 'jobs.html?cat=aerospace' },
-    'Pharma':            { blurb: 'Research, clinical, regulatory, sales — life sciences at scale.',     count: '3,420 open roles', href: 'jobs.html?cat=pharma' }
+    'Pharma':            { blurb: 'Research, clinical, regulatory, sales — life sciences at scale.',     count: '3,420 open roles', href: 'jobs.html?cat=pharma' },
+    'Architecture':      { blurb: 'Design buildings, interiors, and public space.',                       count: '720 open roles',   href: 'jobs.html?cat=architecture' },
+    'Agriculture':       { blurb: 'Farming, agtech, food systems, supply.',                               count: '1,140 open roles', href: 'jobs.html?cat=agriculture' },
+    'Veterinary':        { blurb: 'Vets, vet techs, animal care, research.',                              count: '620 open roles',   href: 'jobs.html?cat=veterinary' },
+    'Energy':            { blurb: 'Renewables, oil & gas, utilities, grid.',                              count: '2,510 open roles', href: 'jobs.html?cat=energy' },
+    'Retail':            { blurb: 'Merchandising, store ops, ecomm, buying.',                             count: '6,820 open roles', href: 'jobs.html?cat=retail' }
   };
 
   function spawnPopup({ name, blurb, count, iconHTML, href, navigateMs = 1700 }) {
@@ -1112,7 +1123,12 @@
     'Real Estate':       [['Cedarpoint Homes','Denver, CO','7 roles'],['Westcare Clinics','Phoenix, AZ','3 roles']],
     'Insurance':         [['Atlas Capital','New York, NY','5 roles'],['Verity Finance','Austin, TX','4 roles'],['Westcare Clinics','Phoenix, AZ','3 roles']],
     'Aerospace':         [['Ironworks Build','Houston, TX','4 roles'],['Granite & Glass','Seattle, WA','3 roles']],
-    'Pharma':            [['Aria Health','Remote','8 roles'],['Meridian Hospital','Chicago, IL','6 roles'],['Westcare Clinics','Phoenix, AZ','5 roles']]
+    'Pharma':            [['Aria Health','Remote','8 roles'],['Meridian Hospital','Chicago, IL','6 roles'],['Westcare Clinics','Phoenix, AZ','5 roles']],
+    'Architecture':      [['Granite & Glass','Seattle, WA','4 roles'],['Cedarpoint Homes','Denver, CO','3 roles']],
+    'Agriculture':       [['Greenfield Trust','Chicago, IL','2 roles'],['Tidewater Resorts','Miami, FL','2 roles']],
+    'Veterinary':        [['Westcare Clinics','Phoenix, AZ','3 roles'],['Meridian Hospital','Chicago, IL','2 roles']],
+    'Energy':            [['Ironworks Build','Houston, TX','5 roles'],['Brightline Electric','Atlanta, GA','4 roles']],
+    'Retail':            [['Brassroot Café','Brooklyn, NY','3 roles'],['Tidewater Resorts','Miami, FL','5 roles'],['Northwind Co.','New York, NY','4 roles']]
   };
 
   // ─── Open the field modal — quick to appear, stays until closed ───
