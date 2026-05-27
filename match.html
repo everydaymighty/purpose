@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Job Match — Pathway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ---- Page layout ---- */
+.match-hero {
+  padding: 64px 0 40px;
+  text-align: center;
+}
+.match-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 5.5vw, 56px);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 14px auto 14px;
+  max-width: 720px;
+  line-height: 1.1;
+}
+.match-hero h1 .accent {
+  background: linear-gradient(135deg, var(--purple-600), var(--purple-800));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.match-hero p {
+  font-size: 17px;
+  color: var(--text-muted);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* ---- Upload zone ---- */
+.upload-section { padding: 0 0 64px; }
+.upload-card {
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  box-shadow: var(--shadow-lg);
+  max-width: 780px;
+  margin: 0 auto;
+}
+.upload-zone {
+  border: 2px dashed var(--purple-300);
+  border-radius: var(--radius-lg);
+  padding: 44px 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s ease;
+  background: var(--purple-50);
+  position: relative;
+  overflow: hidden;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--purple-500);
+  background: var(--purple-100);
+}
+.upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.upload-icon {
+  width: 56px; height: 56px;
+  margin: 0 auto 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--purple-500), var(--purple-700));
+  color: white;
+  display: grid;
+  place-items: center;
+}
+.upload-icon svg { width: 24px; height: 24px; }
+.upload-zone h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.upload-zone p { font-size: 14px; color: var(--text-muted); }
+.upload-zone .file-types {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.file-tag {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid var(--purple-200);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--purple-700);
+}
+.upload-zone.has-file {
+  border-style: solid;
+  border-color: var(--success);
+  background: #F0FDF4;
+}
+.upload-zone.has-file .upload-icon {
+  background: linear-gradient(135deg, #10B981, #059669);
+}
+
+.divider-or {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.divider-or::before, .divider-or::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-solid);
+}
+
+.paste-area {
+  width: 100%;
+  min-height: 140px;
+  padding: 16px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: rgba(255,255,255,0.8);
+  border: 1.5px solid rgba(255,255,255,0.7);
+  border-radius: var(--radius-lg);
+  resize: vertical;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+  line-height: 1.6;
+}
+.paste-area::placeholder { color: var(--text-muted); }
+.paste-area:focus {
+  background: #FFFFFF;
+  border-color: var(--purple-400);
+  box-shadow: 0 0 0 4px rgba(167,139,250,0.25);
+}
+
+.analyze-btn-wrap {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.char-count {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+.char-count.ready { color: var(--success); font-weight: 600; }
+
+/* ---- Analyzing animation ---- */
+.analyzing-state {
+  display: none;
+  text-align: center;
+  padding: 32px 0 16px;
+}
+.analyzing-state.show { display: block; }
+.analyzing-state + .upload-card { display: none; }
+
+.scan-visual {
+  width: 280px;
+  height: 4px;
+  background: var(--purple-100);
+  border-radius: 999px;
+  margin: 0 auto 20px;
+  overflow: hidden;
+  position: relative;
+}
+.scan-bar {
+  height: 100%;
+  width: 30%;
+  background: linear-gradient(90deg, var(--purple-400), var(--purple-600));
+  border-radius: 999px;
+  animation: scanAnim 1.4s ease-in-out infinite;
+}
+@keyframes scanAnim {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(440%); }
+}
+.analyzing-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 340px;
+  margin: 0 auto;
+  text-align: left;
+}
+.astep {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-muted);
+  opacity: 0.35;
+  transition: opacity .4s ease;
+}
+.astep.active { opacity: 1; color: var(--text); }
+.astep.done { opacity: 0.7; }
+.astep.done .astep-dot { background: var(--success); }
+.astep-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--purple-400);
+  flex-shrink: 0;
+  transition: background .3s ease;
+}
+.astep.active .astep-dot {
+  background: var(--purple-600);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.25);
+}
+
+/* ---- Results ---- */
+.results-section { display: none; padding-bottom: 80px; }
+.results-section.show { display: block; }
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.results-title {
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.results-sub {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* Profile summary pill strip */
+.profile-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  padding: 20px 24px;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: var(--radius-lg);
+}
+.profile-strip-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  align-self: center;
+  margin-right: 4px;
+}
+.skill-pill {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--purple-100);
+  color: var(--purple-800);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Sort / filter bar */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.sort-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+.sort-btn {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid var(--border-solid);
+  background: rgba(255,255,255,0.7);
+  color: var(--text);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.sort-btn:hover { border-color: var(--purple-400); color: var(--purple-700); }
+.sort-btn.active {
+  background: var(--purple-700);
+  color: white;
+  border-color: var(--purple-700);
+}
+
+/* Match cards */
+.match-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.match-card {
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: start;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.match-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.match-card.top-match {
+  border-color: var(--purple-300);
+  box-shadow: 0 0 0 2px rgba(167,139,250,0.3), var(--shadow-md);
+}
+
+.match-card-left { min-width: 0; }
+.match-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.company-logo {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--purple-100), var(--purple-200));
+  color: var(--purple-700);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 16px;
+  flex-shrink: 0;
+  border: 1px solid var(--purple-200);
+}
+.match-job-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+.match-job-title a { color: var(--text); transition: color .15s; }
+.match-job-title a:hover { color: var(--purple-700); }
+.match-company-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+.dot-sep {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--purple-300);
+  display: inline-block;
+}
+
+/* Why-it-fits reason section */
+.why-fits {
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  background: var(--purple-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--purple-100);
+}
+.why-fits-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--purple-600);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.why-fits-label svg { width: 12px; height: 12px; }
+.why-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.why-reason {
+  font-size: 13px;
+  color: var(--text);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.5;
+}
+.why-reason-check {
+  color: var(--success);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.why-reason-check svg { width: 13px; height: 13px; }
+
+.match-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.match-tag {
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.8);
+  border: 1px solid var(--border-solid);
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.match-tag.highlight {
+  background: var(--purple-100);
+  border-color: var(--purple-200);
+  color: var(--purple-800);
+  font-weight: 600;
+}
+
+/* Match score + right col */
+.match-card-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+.match-score {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.score-ring-wrap {
+  position: relative;
+  width: 72px; height: 72px;
+  margin-bottom: 6px;
+}
+.score-ring-wrap svg {
+  width: 72px; height: 72px;
+  transform: rotate(-90deg);
+}
+.score-bg { fill: none; stroke: var(--purple-100); stroke-width: 6; }
+.score-arc {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dasharray 1.2s cubic-bezier(.2,.7,.3,1);
+}
+.score-num {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--purple-800);
+  letter-spacing: -0.02em;
+}
+.score-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.top-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--purple-600), var(--purple-800));
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.top-badge svg { width: 10px; height: 10px; }
+
+.apply-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #FFFFFF;
+  color: var(--purple-700);
+  border: 1.5px solid var(--purple-600);
+  box-shadow: 0 2px 8px rgba(76,29,149,0.1);
+  transition: all .18s ease;
+  white-space: nowrap;
+}
+.apply-link:hover {
+  background: var(--purple-50);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(76,29,149,0.18);
+}
+.apply-link svg { width: 14px; height: 14px; }
+
+/* No-match empty state */
+.no-match {
+  text-align: center;
+  padding: 56px 24px;
+}
+.no-match-icon {
+  width: 64px; height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 18px;
+  background: var(--purple-100);
+  color: var(--purple-500);
+  display: grid;
+  place-items: center;
+}
+.no-match-icon svg { width: 28px; height: 28px; }
+
+/* Disclaimer */
+.match-disclaimer {
+  margin-top: 32px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--border-solid);
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  text-align: center;
+}
+.match-disclaimer a { color: var(--purple-700); font-weight: 600; }
+
+/* Try again */
+.try-again-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .match-card { grid-template-columns: 1fr; }
+  .match-card-right { text-align: left; display: flex; align-items: center; gap: 16px; }
+  .match-score { flex-direction: row; align-items: center; gap: 10px; margin-bottom: 0; }
+  .upload-card { padding: 24px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+      </span>
+      Pathway
+    </a>
+    <div class="nav-links">
+      <a href="jobs.html">Browse jobs</a>
+      <a href="index.html#how">How it works</a>
+      <a href="employers.html">For employers</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn btn-ghost">Sign in</a>
+      <a href="signup.html" class="btn btn-primary">Get started</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="jobs.html">Browse jobs</a>
+  <a href="index.html#how">How it works</a>
+  <a href="employers.html">For employers</a>
+  <a href="profile.html">Profile</a>
+  <div class="divider-line"></div>
+  <a href="signin.html" class="btn btn-ghost">Sign in</a>
+  <a href="signup.html" class="btn btn-primary">Get started</a>
+</div>
+
+<!-- HERO -->
+<header class="match-hero">
+  <div class="container">
+    <span class="badge"><span class="badge-dot"></span> AI-powered matching</span>
+    <h1>Find jobs that actually <span class="accent">fit you</span>.</h1>
+    <p>Paste your resume or upload a file. We'll scan it and surface the roles on Pathway that align with your skills, experience, and goals.</p>
+  </div>
+</header>
+
+<!-- ANALYZING STATE (shown during fake scan) -->
+<div class="container">
+  <div class="analyzing-state" id="analyzingState">
+    <div class="scan-visual"><div class="scan-bar"></div></div>
+    <p style="font-weight:700; font-size:17px; margin-bottom:18px;" id="analyzeTitle">Reading your resume…</p>
+    <div class="analyzing-steps">
+      <div class="astep active" id="step1"><span class="astep-dot"></span> Extracting skills &amp; experience</div>
+      <div class="astep" id="step2"><span class="astep-dot"></span> Mapping to job categories</div>
+      <div class="astep" id="step3"><span class="astep-dot"></span> Scoring 1,200+ open roles</div>
+      <div class="astep" id="step4"><span class="astep-dot"></span> Ranking best matches for you</div>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD SECTION -->
+<section class="upload-section" id="uploadSection">
+  <div class="container">
+    <div class="upload-card">
+
+      <!-- File drop zone -->
+      <div class="upload-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt">
+        <div class="upload-icon" id="uploadIcon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <h3 id="dropTitle">Drop your resume here</h3>
+        <p id="dropSubtitle">or click to browse your files</p>
+        <div class="file-types">
+          <span class="file-tag">PDF</span>
+          <span class="file-tag">DOCX</span>
+          <span class="file-tag">TXT</span>
+        </div>
+      </div>
+
+      <div class="divider-or"><span>or paste it below</span></div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="resumeText">Resume text</label>
+        <textarea class="paste-area" id="resumeText" placeholder="Paste the text of your resume here — work history, skills, education, anything you'd include…" rows="7"></textarea>
+      </div>
+
+      <div class="analyze-btn-wrap">
+        <button class="btn btn-primary btn-lg" id="analyzeBtn" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Find my matches
+        </button>
+        <span class="char-count" id="charCount">Type at least 80 characters to continue</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS SECTION -->
+<section class="results-section" id="resultsSection">
+  <div class="container">
+
+    <div class="results-header">
+      <div>
+        <div class="results-title" id="resultsTitle">Your top matches</div>
+        <div class="results-sub" id="resultsSub">Based on your resume · sorted by fit</div>
+      </div>
+      <div class="try-again-bar">
+        <button class="btn btn-outline" id="tryAgainBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+          Analyze another resume
+        </button>
+      </div>
+    </div>
+
+    <!-- Detected-skills strip -->
+    <div class="profile-strip" id="profileStrip">
+      <span class="profile-strip-label">Detected skills</span>
+      <!-- pills injected by JS -->
+    </div>
+
+    <!-- Sort bar -->
+    <div class="sort-bar">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active" data-sort="match">Best match</button>
+      <button class="sort-btn" data-sort="recent">Most recent</button>
+      <button class="sort-btn" data-sort="salary">Salary</button>
+    </div>
+
+    <!-- Cards -->
+    <div class="match-list" id="matchList"></div>
+
+    <div class="match-disclaimer">
+      Match scores are based on keyword and skill overlap. <a href="signup.html">Create a free account</a> to unlock deeper AI matching, salary insights, and one-click apply.
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L12 4l8 16"/><path d="M8 14h8"/></svg>
+          </span>
+          Pathway
+        </a>
+        <p>Helping people find work they love — and helping companies find the people they need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>For job seekers</h4>
+        <ul>
+          <li><a href="jobs.html">Browse jobs</a></li>
+          <li><a href="profile.html">Your profile</a></li>
+          <li><a href="career-advice.html">Career advice</a></li>
+          <li><a href="salary-guide.html">Salary guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>For employers</h4>
+        <ul>
+          <li><a href="employers.html">Post a job</a></li>
+          <li><a href="employers.html#pricing">Pricing</a></li>
+          <li><a href="hiring-resources.html">Hiring resources</a></li>
+          <li><a href="contact.html">Contact sales</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="careers.html">Careers</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Pathway. All rights reserved.</div>
+      <div>Made with care.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================
+   Pathway Job Match — client-side matching engine
+   ===================================================== */
+
+// ---- Job database (would come from API in production) ----
+const JOB_DB = [
+  {
+    id: 1,
+    title: "Senior Product Designer",
+    company: "Notion",
+    logoInitial: "N",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$140k – $175k",
+    posted: "2 days ago",
+    postedDays: 2,
+    salaryMax: 175000,
+    skills: ["figma","design","ux","ui","prototyping","user research","product design","design systems","sketch","interaction design","wireframing","accessibility"],
+    description: "Own design across a major product surface, from discovery through launch.",
+    reasons: [
+      "Your Figma and design systems experience maps directly to this role",
+      "User research background matches their discovery-first process",
+      "Product design portfolio aligns with their B2B SaaS context"
+    ]
+  },
+  {
+    id: 2,
+    title: "Full Stack Engineer",
+    company: "Linear",
+    logoInitial: "L",
+    location: "San Francisco, CA",
+    type: "Full-time",
+    salary: "$160k – $210k",
+    posted: "1 day ago",
+    postedDays: 1,
+    salaryMax: 210000,
+    skills: ["react","typescript","node","javascript","postgresql","api","rest","graphql","git","aws","docker","full stack","backend","frontend","nextjs","prisma"],
+    description: "Build high-performance features across web and API layers.",
+    reasons: [
+      "React and TypeScript skills match their entire frontend stack",
+      "Node.js / API experience covers the backend requirements",
+      "Experience with PostgreSQL or similar databases is a direct fit"
+    ]
+  },
+  {
+    id: 3,
+    title: "Growth Marketing Manager",
+    company: "Loom",
+    logoInitial: "L",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$115k – $145k",
+    posted: "3 days ago",
+    postedDays: 3,
+    salaryMax: 145000,
+    skills: ["marketing","growth","seo","analytics","a/b testing","email marketing","content","paid ads","google analytics","hubspot","conversion","retention","lifecycle","copywriting"],
+    description: "Drive top-of-funnel growth and optimize conversion across the funnel.",
+    reasons: [
+      "Growth and analytics background matches their data-driven culture",
+      "SEO and content experience directly relevant to their organic strategy",
+      "A/B testing experience aligns with their experimentation focus"
+    ]
+  },
+  {
+    id: 4,
+    title: "iOS Engineer",
+    company: "Duolingo",
+    logoInitial: "D",
+    location: "Pittsburgh, PA",
+    type: "Full-time",
+    salary: "$150k – $190k",
+    posted: "5 days ago",
+    postedDays: 5,
+    salaryMax: 190000,
+    skills: ["swift","ios","xcode","objective-c","mobile","apple","swiftui","uikit","core data","animations","performance","testing","ci/cd"],
+    description: "Own key user-facing features in the Duolingo iOS app used by 50M+ users.",
+    reasons: [
+      "Swift and SwiftUI experience maps directly to their iOS stack",
+      "Mobile performance optimization background is highly relevant",
+      "Consumer app experience aligns with their product scale and quality bar"
+    ]
+  },
+  {
+    id: 5,
+    title: "Data Analyst",
+    company: "Stripe",
+    logoInitial: "S",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$130k – $165k",
+    posted: "1 week ago",
+    postedDays: 7,
+    salaryMax: 165000,
+    skills: ["sql","data","analytics","python","tableau","looker","excel","statistics","bi","dashboards","reporting","etl","snowflake","dbt","business intelligence","metrics"],
+    description: "Build data models and dashboards that inform product and business decisions.",
+    reasons: [
+      "SQL and Python skills match their core analytics toolchain",
+      "Dashboard and reporting experience is central to this role",
+      "Statistical background supports their experimentation programs"
+    ]
+  },
+  {
+    id: 6,
+    title: "Backend Engineer (Python)",
+    company: "Figma",
+    logoInitial: "F",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$155k – $200k",
+    posted: "4 days ago",
+    postedDays: 4,
+    salaryMax: 200000,
+    skills: ["python","backend","django","flask","api","rest","postgresql","redis","aws","docker","kubernetes","microservices","distributed systems","performance","scalability"],
+    description: "Build APIs and infrastructure for Figma's collaboration platform.",
+    reasons: [
+      "Python backend experience directly matches their tech stack",
+      "API design and REST skills are core to this role",
+      "AWS and Docker experience covers their infrastructure requirements"
+    ]
+  },
+  {
+    id: 7,
+    title: "Product Manager, Growth",
+    company: "Canva",
+    logoInitial: "C",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$135k – $170k",
+    posted: "6 days ago",
+    postedDays: 6,
+    salaryMax: 170000,
+    skills: ["product management","pm","roadmap","growth","analytics","a/b testing","user research","stakeholder management","agile","jira","metrics","okr","strategy","retention","activation"],
+    description: "Drive product-led growth experiments across activation and retention.",
+    reasons: [
+      "Product management background with growth focus matches exactly",
+      "A/B testing and metrics experience is core to this role",
+      "User research skills complement their discovery-first approach"
+    ]
+  },
+  {
+    id: 8,
+    title: "DevOps / Platform Engineer",
+    company: "Vercel",
+    logoInitial: "V",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$150k – $195k",
+    posted: "2 days ago",
+    postedDays: 2,
+    salaryMax: 195000,
+    skills: ["devops","kubernetes","docker","aws","gcp","terraform","ci/cd","linux","bash","monitoring","reliability","infrastructure","sre","github actions","networking"],
+    description: "Build and scale the infrastructure that powers millions of deployments.",
+    reasons: [
+      "Kubernetes and Docker experience maps to their container-first platform",
+      "CI/CD expertise is central to their developer experience mission",
+      "Cloud infrastructure background (AWS/GCP) is a direct fit"
+    ]
+  },
+  {
+    id: 9,
+    title: "Content Strategist",
+    company: "Intercom",
+    logoInitial: "I",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$95k – $125k",
+    posted: "3 days ago",
+    postedDays: 3,
+    salaryMax: 125000,
+    skills: ["content","writing","strategy","seo","editorial","copywriting","storytelling","brand","content marketing","blog","documentation","ux writing","messaging"],
+    description: "Own content strategy across marketing and product surfaces.",
+    reasons: [
+      "Content strategy and editorial experience matches their scope",
+      "SEO writing skills are directly relevant to their organic growth goals",
+      "UX writing background aligns with their in-product content needs"
+    ]
+  },
+  {
+    id: 10,
+    title: "Machine Learning Engineer",
+    company: "Cohere",
+    logoInitial: "C",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$175k – $230k",
+    posted: "1 day ago",
+    postedDays: 1,
+    salaryMax: 230000,
+    skills: ["machine learning","ml","python","pytorch","tensorflow","nlp","llm","deep learning","transformers","data science","statistics","research","huggingface","fine-tuning","embeddings","rag"],
+    description: "Train and deploy large language models and retrieval systems.",
+    reasons: [
+      "Python ML experience with PyTorch/TensorFlow is a core match",
+      "NLP / LLM background is directly relevant to their product",
+      "Research experience aligns with their experimental culture"
+    ]
+  },
+  {
+    id: 11,
+    title: "UX Researcher",
+    company: "Spotify",
+    logoInitial: "S",
+    location: "New York, NY",
+    type: "Full-time",
+    salary: "$120k – $155k",
+    posted: "1 week ago",
+    postedDays: 7,
+    salaryMax: 155000,
+    skills: ["user research","ux research","qualitative","quantitative","interviews","usability testing","survey","synthesis","personas","journey mapping","research ops","figma","miro"],
+    description: "Drive qualitative and quantitative research to shape Spotify's core product.",
+    reasons: [
+      "UX research background is a direct match for this role",
+      "Qualitative and quantitative methods experience covers their full toolkit",
+      "Research synthesis and storytelling skills align with their influence model"
+    ]
+  },
+  {
+    id: 12,
+    title: "Frontend Engineer (React)",
+    company: "Webflow",
+    logoInitial: "W",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$145k – $185k",
+    posted: "3 days ago",
+    postedDays: 3,
+    salaryMax: 185000,
+    skills: ["react","javascript","typescript","css","html","frontend","animations","performance","accessibility","nextjs","webpack","vite","testing","figma"],
+    description: "Build pixel-perfect, high-performance interfaces for Webflow's visual editor.",
+    reasons: [
+      "React and TypeScript experience is a direct skill match",
+      "CSS / animation skills are especially valued in their visual editor context",
+      "Accessibility focus aligns with their platform-level quality standards"
+    ]
+  }
+];
+
+// ---- Skill taxonomy for keyword extraction ----
+const SKILL_GROUPS = {
+  "Design": ["figma","sketch","design","ux","ui","prototyping","wireframing","interaction design","design systems","adobe","photoshop","illustrator","xd","invision"],
+  "React": ["react","reactjs","nextjs","redux","hooks","jsx"],
+  "TypeScript": ["typescript","ts"],
+  "JavaScript": ["javascript","js","es6","node","nodejs","express"],
+  "Python": ["python","django","flask","fastapi","pandas","numpy"],
+  "Machine Learning": ["machine learning","ml","pytorch","tensorflow","deep learning","nlp","llm","transformers","huggingface","sklearn","scikit"],
+  "SQL": ["sql","postgresql","mysql","sqlite","database","db"],
+  "Data Analysis": ["analytics","data analysis","tableau","looker","excel","bi","dashboards","reporting","snowflake","dbt"],
+  "iOS": ["swift","swiftui","ios","xcode","uikit","objective-c"],
+  "Android": ["android","kotlin","java mobile","jetpack compose"],
+  "DevOps": ["devops","kubernetes","docker","terraform","ci/cd","aws","gcp","azure","infrastructure","linux","bash"],
+  "Product Management": ["product management","product manager","pm","roadmap","agile","scrum","okr","jira"],
+  "Marketing": ["marketing","seo","sem","growth","analytics","a/b testing","email marketing","paid ads","hubspot","content marketing"],
+  "Content": ["content","writing","copywriting","editorial","storytelling","content strategy","ux writing"],
+  "User Research": ["user research","ux research","usability testing","qualitative","quantitative","interviews"],
+};
+
+// ---- State ----
+let resumeText = "";
+let uploadedFileName = "";
+
+// ---- DOM refs ----
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("fileInput");
+const resumeTextArea = document.getElementById("resumeText");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const charCount = document.getElementById("charCount");
+const uploadSection = document.getElementById("uploadSection");
+const analyzingState = document.getElementById("analyzingState");
+const resultsSection = document.getElementById("resultsSection");
+const tryAgainBtn = document.getElementById("tryAgainBtn");
+
+// ---- File drag-and-drop ----
+dropZone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dropZone.classList.add("dragover");
+});
+dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
+dropZone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropZone.classList.remove("dragover");
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+});
+fileInput.addEventListener("change", () => {
+  if (fileInput.files[0]) handleFile(fileInput.files[0]);
+});
+
+function handleFile(file) {
+  const allowedTypes = ["text/plain","application/pdf","application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+  uploadedFileName = file.name;
+
+  // For demo: read TXT files directly; treat PDF/DOCX as uploaded (can't parse client-side without lib)
+  if (file.type === "text/plain") {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      resumeTextArea.value = e.target.result;
+      syncFromTextarea();
+    };
+    reader.readAsText(file);
+  } else {
+    // PDF/DOCX: show "file received" state and use placeholder rich text for demo
+    resumeTextArea.value = "";
+    resumeText = "__FILE_UPLOADED__";
+    uploadedFileName = file.name;
+  }
+
+  dropZone.classList.add("has-file");
+  document.getElementById("dropTitle").textContent = `✓ ${file.name}`;
+  document.getElementById("dropSubtitle").textContent = "File ready — click Analyze to continue";
+  document.getElementById("uploadIcon").innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+  if (resumeText === "__FILE_UPLOADED__") {
+    analyzeBtn.disabled = false;
+    charCount.textContent = `${file.name} ready`;
+    charCount.className = "char-count ready";
+  }
+}
+
+// ---- Textarea listener ----
+resumeTextArea.addEventListener("input", syncFromTextarea);
+function syncFromTextarea() {
+  resumeText = resumeTextArea.value.trim();
+  const len = resumeText.length;
+  if (len >= 80) {
+    analyzeBtn.disabled = false;
+    charCount.textContent = `${len.toLocaleString()} chars — ready to analyze`;
+    charCount.className = "char-count ready";
+  } else {
+    analyzeBtn.disabled = true;
+    charCount.textContent = `${80 - len} more characters needed`;
+    charCount.className = "char-count";
+  }
+}
+
+// ---- Analyze button ----
+analyzeBtn.addEventListener("click", startAnalysis);
+
+function startAnalysis() {
+  uploadSection.style.display = "none";
+  analyzingState.style.display = "block";
+
+  const steps = [
+    document.getElementById("step1"),
+    document.getElementById("step2"),
+    document.getElementById("step3"),
+    document.getElementById("step4"),
+  ];
+  const titles = [
+    "Reading your resume…",
+    "Identifying your skills…",
+    "Scoring 1,200+ open roles…",
+    "Building your results…"
+  ];
+  const titleEl = document.getElementById("analyzeTitle");
+
+  let current = 0;
+  const advance = () => {
+    if (current > 0) {
+      steps[current - 1].classList.remove("active");
+      steps[current - 1].classList.add("done");
+    }
+    if (current < steps.length) {
+      steps[current].classList.add("active");
+      titleEl.textContent = titles[current];
+      current++;
+      setTimeout(advance, current === 4 ? 900 : 700);
+    } else {
+      // Done — show results
+      setTimeout(showResults, 500);
+    }
+  };
+  advance();
+}
+
+// ---- Core matching algorithm ----
+function extractSkills(text) {
+  if (text === "__FILE_UPLOADED__") {
+    // Return a diverse sample set for demo when a binary file is uploaded
+    return ["React", "TypeScript", "JavaScript", "Python", "SQL", "Design", "Product Management", "User Research"];
+  }
+  const lower = text.toLowerCase();
+  const found = [];
+  for (const [group, keywords] of Object.entries(SKILL_GROUPS)) {
+    for (const kw of keywords) {
+      if (lower.includes(kw)) {
+        found.push(group);
+        break;
+      }
+    }
+  }
+  return [...new Set(found)];
+}
+
+function scoreJob(job, text, detectedGroups) {
+  if (text === "__FILE_UPLOADED__") {
+    // Score against detected groups from upload
+    const groupKeywords = detectedGroups.flatMap(g => SKILL_GROUPS[g] || []);
+    const hits = job.skills.filter(s => groupKeywords.some(kw => kw.includes(s) || s.includes(kw)));
+    return Math.min(95, 40 + hits.length * 8 + Math.floor(Math.random() * 12));
+  }
+
+  const lower = text.toLowerCase();
+  let score = 0;
+  let hits = 0;
+
+  for (const skill of job.skills) {
+    if (lower.includes(skill)) {
+      hits++;
+      score += 7;
+    }
+  }
+
+  // Bonus for title words in text
+  const titleWords = job.title.toLowerCase().split(/\s+/);
+  for (const w of titleWords) {
+    if (w.length > 3 && lower.includes(w)) score += 4;
+  }
+
+  // Clamp and add natural variance
+  const base = Math.min(score, 88);
+  const variance = Math.floor(Math.random() * 9) - 2;
+  return Math.max(18, Math.min(97, base + variance));
+}
+
+function showResults() {
+  const detectedGroups = extractSkills(resumeText);
+  const scored = JOB_DB.map(job => ({
+    ...job,
+    score: scoreJob(job, resumeText, detectedGroups)
+  })).sort((a, b) => b.score - a.score);
+
+  // Populate skills strip
+  const strip = document.getElementById("profileStrip");
+  const pills = (detectedGroups.length > 0 ? detectedGroups : ["General experience"]).map(s =>
+    `<span class="skill-pill">${s}</span>`
+  ).join("");
+  strip.innerHTML = `<span class="profile-strip-label">Detected skills</span>${pills}`;
+
+  renderJobs(scored, "match");
+
+  // Update header counts
+  const goodMatches = scored.filter(j => j.score >= 55).length;
+  document.getElementById("resultsTitle").textContent = `${goodMatches} strong matches found`;
+  document.getElementById("resultsSub").textContent =
+    `Based on ${detectedGroups.length} detected skills · sorted by match score`;
+
+  analyzingState.style.display = "none";
+  resultsSection.style.display = "block";
+  resultsSection.classList.add("show");
+
+  // Animate score rings after a tick
+  setTimeout(animateRings, 100);
+
+  // Scroll to results
+  resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderJobs(jobs, sortMode) {
+  const list = document.getElementById("matchList");
+  let sorted = [...jobs];
+  if (sortMode === "recent") sorted.sort((a, b) => a.postedDays - b.postedDays);
+  if (sortMode === "salary") sorted.sort((a, b) => b.salaryMax - a.salaryMax);
+
+  if (sorted.length === 0) {
+    list.innerHTML = `<div class="no-match">
+      <div class="no-match-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <h3>No strong matches yet</h3>
+      <p>Try adding more detail about your skills and experience — even a few extra sentences can unlock new matches.</p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = sorted.map((job, i) => {
+    const isTop = job.score >= 82;
+    const scoreColor = job.score >= 75 ? "var(--purple-600)" : job.score >= 55 ? "var(--warning)" : "var(--text-muted)";
+    const circumference = 2 * Math.PI * 29; // r=29
+    const dashArray = (job.score / 100) * circumference;
+
+    const reasonsHTML = job.reasons.map(r => `
+      <div class="why-reason">
+        <span class="why-reason-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        ${r}
+      </div>`).join("");
+
+    const tagsHTML = job.skills.slice(0, 5).map((skill, si) => {
+      const isHighlighted = resumeText === "__FILE_UPLOADED__" ? si < 2 :
+        resumeText.toLowerCase().includes(skill);
+      return `<span class="match-tag ${isHighlighted ? "highlight" : ""}">${skill}</span>`;
+    }).join("");
+
+    return `
+    <div class="match-card ${isTop ? "top-match" : ""}" data-id="${job.id}">
+      <div class="match-card-left">
+        <div class="match-card-top">
+          <div class="company-logo">${job.logoInitial}</div>
+          <div>
+            <div class="match-job-title"><a href="job.html">${job.title}</a></div>
+            <div class="match-company-row">
+              <span>${job.company}</span>
+              <span class="dot-sep"></span>
+              <span>${job.location}</span>
+              <span class="dot-sep"></span>
+              <span>${job.type}</span>
+              <span class="dot-sep"></span>
+              <span>${job.salary}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="why-fits">
+          <div class="why-fits-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Why this fits you
+          </div>
+          <div class="why-reasons">${reasonsHTML}</div>
+        </div>
+
+        <div class="match-tags">${tagsHTML}</div>
+      </div>
+
+      <div class="match-card-right">
+        ${isTop ? `<div class="top-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Top match</div>` : ""}
+        <div class="match-score">
+          <div class="score-ring-wrap">
+            <svg viewBox="0 0 72 72">
+              <circle class="score-bg" cx="36" cy="36" r="29"/>
+              <circle class="score-arc"
+                cx="36" cy="36" r="29"
+                stroke="${scoreColor}"
+                stroke-dasharray="0 ${circumference}"
+                data-dash="${dashArray}"
+                data-circ="${circumference}"
+              />
+            </svg>
+            <div class="score-num">${job.score}%</div>
+          </div>
+          <div class="score-label">Match</div>
+        </div>
+        <a href="job.html" class="apply-link">
+          View job
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function animateRings() {
+  document.querySelectorAll(".score-arc").forEach(arc => {
+    const dash = parseFloat(arc.dataset.dash);
+    const circ = parseFloat(arc.dataset.circ);
+    arc.style.strokeDasharray = `${dash} ${circ}`;
+  });
+}
+
+// ---- Sort buttons ----
+let currentJobs = [];
+document.querySelector(".sort-bar").addEventListener("click", (e) => {
+  const btn = e.target.closest(".sort-btn");
+  if (!btn) return;
+  document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  const detectedGroups = extractSkills(resumeText);
+  const scored = JOB_DB.map(job => ({
+    ...job,
+    score: scoreJob(job, resumeText, detectedGroups)
+  }));
+  renderJobs(scored, btn.dataset.sort);
+  setTimeout(animateRings, 80);
+});
+
+// ---- Try again ----
+tryAgainBtn.addEventListener("click", () => {
+  resultsSection.style.display = "none";
+  resultsSection.classList.remove("show");
+  uploadSection.style.display = "";
+  analyzingState.style.display = "none";
+
+  // Reset form
+  resumeTextArea.value = "";
+  resumeText = "";
+  fileInput.value = "";
+  uploadedFileName = "";
+  dropZone.classList.remove("has-file");
+  document.getElementById("dropTitle").textContent = "Drop your resume here";
+  document.getElementById("dropSubtitle").textContent = "or click to browse your files";
+  document.getElementById("uploadIcon").innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`;
+  analyzeBtn.disabled = true;
+  charCount.textContent = "Type at least 80 characters to continue";
+  charCount.className = "char-count";
+  document.querySelectorAll(".astep").forEach(s => { s.classList.remove("active","done"); });
+  document.getElementById("step1").classList.add("active");
+
+  // Reset analyze steps
+  const steps = ["step1","step2","step3","step4"];
+  steps.forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove("active","done");
+  });
+
+  uploadSection.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+// ---- Mobile nav ----
+const toggle = document.getElementById('navToggle');
+const mobileNav = document.getElementById('mobileNav');
+if (toggle && mobileNav) {
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('open');
+    mobileNav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', toggle.classList.contains('open'));
+  });
+}
+</script>
+
+</body>
+</html>
