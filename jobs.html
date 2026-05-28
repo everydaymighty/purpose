@@ -743,10 +743,25 @@
   const ADZUNA_APP_KEY = 'bba73e0a03860fd2a92b7410bbd2e079';
   const ADZUNA_COUNTRY = 'us';                   // us, gb, au, ca, de, etc.
 
+  // Wipe the demo cards immediately on script load so they NEVER show.
+  // Adzuna's loadRealJobs() will fill this with real listings, OR
+  // show a "couldn't load" message if the fetch fails.
+  (function clearDemo() {
+    const list  = document.getElementById('jobResults');
+    const count = document.getElementById('resultsCount');
+    const pager = document.getElementById('pager');
+    if (list) list.innerHTML = '<div style="text-align:center; padding:48px 20px; color:var(--text-muted);"><div style="font-weight:700; color:var(--text); margin-bottom:6px;">Loading live jobs…</div><div style="font-size:13px;">Fetching from Adzuna</div></div>';
+    if (count) count.innerHTML = '<strong>Loading…</strong>';
+    if (pager) pager.innerHTML = '';
+    // Disable the demo's renderPage so it can't repaint demos later
+    if (typeof renderPage === 'function') window.renderPage = () => {};
+  })();
+
   async function loadRealJobs() {
     // Skip if no keys configured yet — fall back to hardcoded cards
     if (ADZUNA_APP_ID.startsWith('YOUR_') || ADZUNA_APP_KEY.startsWith('YOUR_')) {
       console.info('[Adzuna] No keys set — using demo jobs. See instructions in jobs.html.');
+      showStatusBanner('demo', 'Showing demo jobs — Adzuna keys not configured.');
       return;
     }
 
@@ -762,14 +777,58 @@
     if (query) url.searchParams.set('what',  query);
     if (where) url.searchParams.set('where', where);
 
+    console.info('[Adzuna] fetching:', url.toString());
+
     try {
       const res = await fetch(url);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      console.info('[Adzuna] response status:', res.status);
+      if (!res.ok) {
+        const body = await res.text();
+        throw new Error('HTTP ' + res.status + ' — ' + body.slice(0, 200));
+      }
       const data = await res.json();
+      console.info('[Adzuna] got', data.results?.length, 'jobs, total available:', data.count);
+      if (!data.results || data.results.length === 0) {
+        showStatusBanner('warn', 'Adzuna returned 0 jobs. Showing demo data.');
+        return;
+      }
       renderAdzunaResults(data);
+      // Neutralize the demo's filter/sort/pagination so it can't repaint
+      // over our real Adzuna results.
+      if (typeof renderPage === 'function') window.renderPage = () => {};
+      const pager = document.getElementById('pager');
+      if (pager) pager.innerHTML = '';
+      showStatusBanner('ok', `Showing ${data.count?.toLocaleString() || data.results.length} live jobs from Adzuna.`);
     } catch (err) {
-      console.warn('[Adzuna] fetch failed, keeping demo jobs:', err);
+      console.error('[Adzuna] fetch failed:', err);
+      showStatusBanner('err', 'Couldn\'t load live jobs right now. ' + (err.message || ''));
+      const list = document.getElementById('jobResults');
+      if (list) list.innerHTML = '<div style="text-align:center; padding:48px 20px;"><div style="font-weight:700; color:var(--text); margin-bottom:6px;">Couldn\'t load jobs</div><div style="color:var(--text-muted); font-size:14px;">Try refreshing in a moment. Details in browser console (F12).</div></div>';
+      const count = document.getElementById('resultsCount');
+      if (count) count.innerHTML = '<strong>0</strong> jobs';
     }
+  }
+
+  function showStatusBanner(kind, msg) {
+    const colors = {
+      ok:   { bg: '#DCFCE7', text: '#166534', border: '#86EFAC' },
+      warn: { bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' },
+      err:  { bg: '#FEE2E2', text: '#991B1B', border: '#FCA5A5' },
+      demo: { bg: 'rgba(237,233,254,0.6)', text: 'var(--purple-800)', border: 'var(--purple-300)' }
+    };
+    const c = colors[kind] || colors.demo;
+    let banner = document.getElementById('adzunaStatus');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'adzunaStatus';
+      banner.style.cssText = 'padding:10px 16px; border-radius:10px; font-size:13px; font-weight:600; margin-bottom:16px; border:1px solid;';
+      const header = document.querySelector('.results-header');
+      if (header && header.parentNode) header.parentNode.insertBefore(banner, header);
+    }
+    banner.style.background    = c.bg;
+    banner.style.color         = c.text;
+    banner.style.borderColor   = c.border;
+    banner.textContent = msg;
   }
 
   function renderAdzunaResults(data) {
